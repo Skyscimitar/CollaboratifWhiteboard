@@ -1,0 +1,40 @@
+﻿using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+
+namespace Hostserver
+{
+    public class HostListener
+    {
+        public Socket ListenerSocket{get; private set; }
+        public short Port = 8080;
+
+        public HostListener()
+        {
+            ListenerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        }
+
+        public void StartNewWhiteboardListener()
+        {
+            Console.WriteLine("Started Listening on port {0}, protocol: {1}");
+            ListenerSocket.Bind(new IPEndPoint(IPAddress.Any, Port));
+            ListenerSocket.Listen(10);
+            ListenerSocket.BeginAccept(AcceptNewConnection, ListenerSocket);
+        }
+
+        private void AcceptNewConnection(IAsyncResult ar)
+        {
+         try 
+         {
+             Console.WriteLine("Accepted Connection on port {0}, protocol: {1}", Port, ProtocolType.Tcp);
+             Socket NewConnectionSocket = ListenerSocket.EndAccept(ar);
+             //TODO add new  client to the client controller
+         }
+         catch (Exception e)
+         {
+             Console.WriteLine(e.ToString());
+         } 
+        }
+    }
+}
