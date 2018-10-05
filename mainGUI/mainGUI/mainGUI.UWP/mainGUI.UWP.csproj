@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{B0DF7000-0424-4827-B840-AF70C16343D7}</ProjectGuid>
+    <ProjectGuid>{2228FBBF-1815-4BA2-AA34-E0DC11C4C598}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>mainGUI.UWP</RootNamespace>
@@ -148,7 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\mainGUI\mainGUI.csproj">
-      <Project>{6A736041-C54D-4334-8C8D-573249AAC8A0}</Project>
+      <Project>{86EBD1FC-BE7C-468A-A8E5-5AE10B291C84}</Project>
       <Name>mainGUI</Name>
     </ProjectReference>
   </ItemGroup>

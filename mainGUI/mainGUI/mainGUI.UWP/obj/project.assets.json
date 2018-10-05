@@ -7454,11 +7454,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\TEMP\\Documents\\Centrale\\OSY\\POOA\\Projet\\CollaboratifWhiteboard\\mainGUI\\mainGUI.UWP\\mainGUI.UWP.csproj",
+      "projectUniqueName": "C:\\Users\\TEMP\\Documents\\Centrale\\OSY\\POOA\\Projet\\CollaboratifWhiteboard\\mainGUI\\mainGUI\\mainGUI.UWP\\mainGUI.UWP.csproj",
       "projectName": "mainGUI.UWP",
-      "projectPath": "C:\\Users\\TEMP\\Documents\\Centrale\\OSY\\POOA\\Projet\\CollaboratifWhiteboard\\mainGUI\\mainGUI.UWP\\mainGUI.UWP.csproj",
+      "projectPath": "C:\\Users\\TEMP\\Documents\\Centrale\\OSY\\POOA\\Projet\\CollaboratifWhiteboard\\mainGUI\\mainGUI\\mainGUI.UWP\\mainGUI.UWP.csproj",
       "packagesPath": "C:\\Users\\TEMP\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\TEMP\\Documents\\Centrale\\OSY\\POOA\\Projet\\CollaboratifWhiteboard\\mainGUI\\mainGUI.UWP\\obj\\",
+      "outputPath": "C:\\Users\\TEMP\\Documents\\Centrale\\OSY\\POOA\\Projet\\CollaboratifWhiteboard\\mainGUI\\mainGUI\\mainGUI.UWP\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "fallbackFolders": [
@@ -7478,8 +7478,8 @@
       "frameworks": {
         "uap10.0.16299": {
           "projectReferences": {
-            "C:\\Users\\TEMP\\Documents\\Centrale\\OSY\\POOA\\Projet\\CollaboratifWhiteboard\\mainGUI\\mainGUI\\mainGUI.csproj": {
-              "projectPath": "C:\\Users\\TEMP\\Documents\\Centrale\\OSY\\POOA\\Projet\\CollaboratifWhiteboard\\mainGUI\\mainGUI\\mainGUI.csproj"
+            "C:\\Users\\TEMP\\Documents\\Centrale\\OSY\\POOA\\Projet\\CollaboratifWhiteboard\\mainGUI\\mainGUI\\mainGUI\\mainGUI.csproj": {
+              "projectPath": "C:\\Users\\TEMP\\Documents\\Centrale\\OSY\\POOA\\Projet\\CollaboratifWhiteboard\\mainGUI\\mainGUI\\mainGUI\\mainGUI.csproj"
             }
           }
         }
