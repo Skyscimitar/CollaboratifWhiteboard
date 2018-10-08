@@ -44,8 +44,8 @@ namespace Hostserver
                     // the following line can be removed after testing
                     Console.WriteLine(data);
                     // raise the received package data with appropriate context information
-                    PackageReceivedEventArgs eventArgs = new PackageReceivedEventArgs{data = data, socket = _receiveSocket, id = Id};
-                    PackageReceivedHandler.OnPackageReceived(this, eventArgs);
+                    PackageReceivedEventArgs eventArgs = new PackageReceivedEventArgs{data = data, id = Id, socket = _receiveSocket};
+                    PackageReceivedHandler.OnReceivePackage(this, eventArgs);
                 }
                 else
                 {

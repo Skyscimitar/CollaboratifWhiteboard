@@ -2,8 +2,8 @@ using System;
 
 namespace Hostserver
 {
-    static public class PackageReceivedHandler
+    public static class PackageReceivedHandler
     {
-        static public EventHandler<PackageReceivedEventArgs> OnPackageReceived;
+        public static EventHandler<PackageReceivedEventArgs> OnReceivePackage;
     }
 }
