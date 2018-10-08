@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Page en XAML où on définit la structure de la page-->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:mainGUI"
              xmlns:views="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
              x:Class="mainGUI.MainPage">
 
+    <!-- Structure en grille à une ligne et 2 colonnes : une pour les différentes options, une pour le dessin--!>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -13,8 +15,24 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <BoxView Grid.Row="0" Grid.Column="0" BackgroundColor="Yellow"/>
-        <views:SKCanvasView Grid.Row="0" Grid.Column="1" PaintSurface="OnPainting" EnableTouchEvents="True" Touch="SKCanvasView_Touch" />
+        <!-- Grille à l'intérieur de la première colonne dans laquelle on place les différents boutons en option --!>
+        <Grid Grid.Column="0" Grid.Row="0" BackgroundColor="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" x:Name="PathButton" Text="Line" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="PathButton_Clicked"/>
+            <Button Grid.Row="1" x:Name="RubberButton" Text="Rubber" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="RubberButton_Clicked"/>
+            <Button Grid.Row="2" x:Name="ClearButton" Text="Clear" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="ClearButton_Clicked"/>
+        </Grid>
+        <!--Le canvas permettant de dessiner dessus.-->
+        <views:SKCanvasView x:Name="View" Grid.Row="0" Grid.Column="1" PaintSurface="OnPainting" EnableTouchEvents="True" Touch="SKCanvasView_Touch" />
     </Grid>
 
 
