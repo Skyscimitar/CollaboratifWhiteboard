@@ -16,7 +16,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <!-- Grille à l'intérieur de la première colonne dans laquelle on place les différents boutons en option -->
-        <Grid Grid.Column="0" Grid.Row="0" BackgroundColor="White">
+        <Grid Grid.Column="0" Grid.Row="0" BackgroundColor="LightGray">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
