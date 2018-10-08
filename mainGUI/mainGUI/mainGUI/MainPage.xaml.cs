@@ -14,7 +14,10 @@ namespace mainGUI
     {
         private Dictionary<long, ColoredPath> temporaryPaths = new Dictionary<long, ColoredPath>(); //dictionnaire stockant les dessins en cours.
         private List<ColoredPath> paths = new List<ColoredPath>(); //liste des dessins terminés
+        private Dictionary<long, ColoredCircle> temporaryCircle = new Dictionary<long, ColoredCircle>();
+        private List<ColoredCircle> circles = new List<ColoredCircle>();
         private string option; //variable stockant l'option choisie par l'utilisateur (trait, gomme, cercle, etc.)
+        private SKColor color = SKColors.Black;
 
         public MainPage()
         {
@@ -42,6 +45,27 @@ namespace mainGUI
                 touchPathStroke.Color = touchPath.Color;
                 canvas.DrawPath(touchPath.Path, touchPathStroke);
             }
+
+            var touchCircleStroke = new SKPaint
+            {
+                IsAntialias = true,
+                Style = SKPaintStyle.Stroke,
+                StrokeWidth = 5
+            };
+
+            foreach (var touchCircle in circles)
+            {
+                touchCircleStroke.Color = touchCircle.Color;
+                canvas.DrawCircle(touchCircle.Center, touchCircle.Radius, touchCircleStroke);
+            }
+
+            //On dessine toujours le temporaire par dessus le reste
+            foreach (var touchCircle in temporaryCircle.Values)
+            {
+                touchCircleStroke.Color = touchCircle.Color;
+                canvas.DrawCircle(touchCircle.Center, touchCircle.Radius, touchCircleStroke);
+            }
+
             foreach (var touchPath in temporaryPaths.Values)
             {
                 touchPathStroke.Color = touchPath.Color;
@@ -52,9 +76,47 @@ namespace mainGUI
         //méthode définissant ce qu'il se passe quand on appuie sur l'écran. On créera certainement des sous-méthodes selon l'option à l'avenir
         private void SKCanvasView_Touch(object sender, SKTouchEventArgs e) 
         {
-            SKColor color = SKColors.Black;
             if (option == "rubber")
-                color = SKColors.White;               
+                PathAction(e, SKColors.White);
+            else if (option == "path")
+                PathAction(e, color);
+            else if (option == "circle")
+                CircleAction(e, color);
+
+            e.Handled = true;
+            ((SKCanvasView)sender).InvalidateSurface();
+        }
+
+        //Ces méthodes bouton permettant de choisir l'option seront à unifier (elles font toutes la même chose en fait)
+        private void OptionButton_Clicked(object sender, EventArgs e)
+        {
+            var button = (Button)sender;
+
+            if (button.Equals(FindByName("PathButton")))
+                option = "path";
+            else if (button.Equals(FindByName("RubberButton")))
+                option = "rubber";
+            else if (button.Equals(FindByName("CircleButton")))
+                option = "circle";
+            foreach (Button b in ((Grid)button.Parent).Children)
+                b.BackgroundColor = Color.LightGray;
+            button.BackgroundColor = Color.Gray;
+        }
+
+
+        //Ce bouton vide la zône de dessin, sera potentiellement à réserver à l'hôte.
+        private void ClearButton_Clicked(object sender, EventArgs e)
+        {
+            var view = (SKCanvasView) this.FindByName("View");
+            paths.Clear();
+            temporaryPaths.Clear();
+            circles.Clear();
+            temporaryCircle.Clear();
+            view.InvalidateSurface();
+        }
+
+        private void PathAction(SKTouchEventArgs e, SKColor color)
+        {
             switch (e.ActionType)
             {
                 //Quand on appuie, commencer à dessiner
@@ -78,29 +140,31 @@ namespace mainGUI
                     temporaryPaths.Remove(e.Id);
                     break;
             }
-
-            e.Handled = true;
-            ((SKCanvasView)sender).InvalidateSurface();
         }
 
-        //Ces méthodes bouton permettant de choisir l'option seront à unifier (elles font toutes la même chose en fait)
-        private void PathButton_Clicked(object sender, EventArgs e)
+        private void CircleAction(SKTouchEventArgs e, SKColor color)
         {
-            option = "path";
-        }
-
-        private void RubberButton_Clicked(object sender, EventArgs e)
-        {
-            option = "rubber";           
-        }
-
-        //Ce bouton vide la zône de dessin, sera potentiellement à réserver à l'hôte.
-        private void ClearButton_Clicked(object sender, EventArgs e)
-        {
-            var view = (SKCanvasView) this.FindByName("View");
-            paths.Clear();
-            temporaryPaths.Clear();
-            view.InvalidateSurface();
+            switch (e.ActionType)
+            {
+                case SKTouchAction.Pressed:
+                    var c = new ColoredCircle { Color = color, Center = e.Location, Radius = 0.1F };
+                    temporaryCircle[e.Id] = c;
+                    break;
+                case SKTouchAction.Moved:
+                    if (e.InContact)
+                    {
+                        c = temporaryCircle[e.Id];
+                        c.Radius = (float)Math.Sqrt(Math.Pow(e.Location.X - c.Center.X, 2) + Math.Pow(e.Location.Y - c.Center.Y, 2));
+                    }
+                    break;
+                case SKTouchAction.Released:
+                    circles.Add(temporaryCircle[e.Id]);
+                    temporaryCircle.Remove(e.Id);
+                    break;
+                case SKTouchAction.Cancelled:
+                    temporaryCircle.Remove(e.Id);
+                    break;
+            }
         }
     }
 }
