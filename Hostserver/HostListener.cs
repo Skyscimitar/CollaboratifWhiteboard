@@ -8,12 +8,10 @@ namespace Hostserver
     public class HostListener
     {
         public Socket ListenerSocket{get; private set; }
-        private ClientController controller;
         public short Port = 8080;
 
-        public HostListener(ClientController controller)
+        public HostListener()
         {
-            this.controller = controller;
             ListenerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
 
@@ -31,7 +29,7 @@ namespace Hostserver
          {
              Console.WriteLine("Accepted Connection on port {0}, protocol: {1}", Port, ProtocolType.Tcp);
              Socket NewConnectionSocket = ListenerSocket.EndAccept(ar);
-             controller.AddClient(NewConnectionSocket);
+             ClientController.AddClient(NewConnectionSocket);
          }
          catch (Exception e)
          {

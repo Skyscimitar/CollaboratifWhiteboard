@@ -8,12 +8,10 @@ namespace Hostserver
     public class HostServer
     {
         private HostListener listener;
-        private ClientController clientController;
 
         public HostServer()
         {
-            clientController = new ClientController();
-            listener = new HostListener(clientController);
+            listener = new HostListener();
         }
 
 
@@ -24,7 +22,7 @@ namespace Hostserver
 
         public List<Client> getClientList()
         {
-            return clientController.ClientList;
+            return ClientController.ClientList;
         }
 
         public void SendData(string data, Socket sendSocket)
