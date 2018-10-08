@@ -34,12 +34,36 @@ namespace Hostserver
 
         private void ReceiveCallback(IAsyncResult ar)
         {
-
+            try
+            {
+                if(_receiveSocket.EndReceive(ar)>1)
+                {
+                    _buffer = new byte[BitConverter.ToInt32(_buffer,0)];
+                    _receiveSocket.Receive(_buffer, _buffer.Length, SocketFlags.None);
+                    //everything is received, now we convert the data:
+                    string data = Encoding.Default.GetString(_buffer);
+                    Console.WriteLine(data);
+                }
+                else
+                {
+                    Disconnect();
+                }
+            }
+            catch
+            {
+                if(!_receiveSocket.Connected)
+                {
+                    Disconnect();
+                }
+                else
+                    StartReceiving();
+            }
         }
 
         private void Disconnect()
         {
-
+            _receiveSocket.Disconnect(true);
+            //TODO remove attached client from the client controller
         }
     }
 }

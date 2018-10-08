@@ -11,6 +11,7 @@ namespace Hostserver
     {
         public Socket Socket {get; set;}
         public int Id {get; private set;}
+        private PacketReceiver receiver;
 
         //add package receiver and package senders
 

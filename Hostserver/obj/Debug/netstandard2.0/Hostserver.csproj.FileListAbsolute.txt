@@ -1,0 +1,9 @@
+/Users/danieltaylor/Projects/CollaboratifWhiteboard/Hostserver/bin/Debug/netstandard2.0/Hostserver.deps.json
+/Users/danieltaylor/Projects/CollaboratifWhiteboard/Hostserver/bin/Debug/netstandard2.0/Hostserver.dll
+/Users/danieltaylor/Projects/CollaboratifWhiteboard/Hostserver/bin/Debug/netstandard2.0/Hostserver.pdb
+/Users/danieltaylor/Projects/CollaboratifWhiteboard/Hostserver/obj/Debug/netstandard2.0/Hostserver.csprojAssemblyReference.cache
+/Users/danieltaylor/Projects/CollaboratifWhiteboard/Hostserver/obj/Debug/netstandard2.0/Hostserver.csproj.CoreCompileInputs.cache
+/Users/danieltaylor/Projects/CollaboratifWhiteboard/Hostserver/obj/Debug/netstandard2.0/Hostserver.AssemblyInfoInputs.cache
+/Users/danieltaylor/Projects/CollaboratifWhiteboard/Hostserver/obj/Debug/netstandard2.0/Hostserver.AssemblyInfo.cs
+/Users/danieltaylor/Projects/CollaboratifWhiteboard/Hostserver/obj/Debug/netstandard2.0/Hostserver.dll
+/Users/danieltaylor/Projects/CollaboratifWhiteboard/Hostserver/obj/Debug/netstandard2.0/Hostserver.pdb
