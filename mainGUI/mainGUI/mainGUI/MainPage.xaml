@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:mainGUI"
+             xmlns:views="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+             x:Class="mainGUI.MainPage">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <BoxView Grid.Row="0" Grid.Column="0" BackgroundColor="Yellow"/>
+        <views:SKCanvasView Grid.Row="0" Grid.Column="1" PaintSurface="OnPainting" EnableTouchEvents="True" Touch="SKCanvasView_Touch" />
+    </Grid>
+
+
+</ContentPage>
