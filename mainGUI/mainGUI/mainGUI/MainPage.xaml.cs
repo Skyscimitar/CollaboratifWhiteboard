@@ -12,10 +12,8 @@ namespace mainGUI
     //Ici on définit les actions à effectuer sur cette page.
     public partial class MainPage : ContentPage
     {
-        private Dictionary<long, ColoredPath> temporaryPaths = new Dictionary<long, ColoredPath>(); //dictionnaire stockant les dessins en cours.
-        private List<ColoredPath> paths = new List<ColoredPath>(); //liste des dessins terminés
-        private Dictionary<long, ColoredCircle> temporaryCircle = new Dictionary<long, ColoredCircle>();
-        private List<ColoredCircle> circles = new List<ColoredCircle>();
+        private Dictionary<long,object> temporaryForms =new Dictionary<long,object>();
+        private List<object> forms = new List<object>();
         private string option; //variable stockant l'option choisie par l'utilisateur (trait, gomme, cercle, etc.)
         private SKColor color = SKColors.Black;
 
@@ -38,14 +36,6 @@ namespace mainGUI
                 StrokeWidth = 5
             };
 
-            // dessine les lignes
-
-            foreach (var touchPath in paths)
-            {
-                touchPathStroke.Color = touchPath.Color;
-                canvas.DrawPath(touchPath.Path, touchPathStroke);
-            }
-
             var touchCircleStroke = new SKPaint
             {
                 IsAntialias = true,
@@ -53,23 +43,34 @@ namespace mainGUI
                 StrokeWidth = 5
             };
 
-            foreach (var touchCircle in circles)
+            foreach (var touchForm in forms)
             {
-                touchCircleStroke.Color = touchCircle.Color;
-                canvas.DrawCircle(touchCircle.Center, touchCircle.Radius, touchCircleStroke);
+                if (touchForm is ColoredPath touchPath)
+                {
+                    touchPathStroke.Color = touchPath.Color;
+                    canvas.DrawPath(touchPath.Path, touchPathStroke);
+                }
+
+                if (touchForm is ColoredCircle touchCircle)
+                {
+                    touchCircleStroke.Color = touchCircle.Color;
+                    canvas.DrawCircle(touchCircle.Center, touchCircle.Radius, touchCircleStroke);
+                }
             }
 
-            //On dessine toujours le temporaire par dessus le reste
-            foreach (var touchCircle in temporaryCircle.Values)
+            foreach(var touchForm in temporaryForms.Values)
             {
-                touchCircleStroke.Color = touchCircle.Color;
-                canvas.DrawCircle(touchCircle.Center, touchCircle.Radius, touchCircleStroke);
-            }
+                if(touchForm is ColoredPath touchPath)
+                {
+                    touchPathStroke.Color = touchPath.Color;
+                    canvas.DrawPath(touchPath.Path, touchPathStroke);
+                }
 
-            foreach (var touchPath in temporaryPaths.Values)
-            {
-                touchPathStroke.Color = touchPath.Color;
-                canvas.DrawPath(touchPath.Path, touchPathStroke);
+                if(touchForm is ColoredCircle touchCircle)
+                {
+                    touchCircleStroke.Color = touchCircle.Color;
+                    canvas.DrawCircle(touchCircle.Center, touchCircle.Radius, touchCircleStroke);
+                }
             }
         }
 
@@ -108,10 +109,8 @@ namespace mainGUI
         private void ClearButton_Clicked(object sender, EventArgs e)
         {
             var view = (SKCanvasView) this.FindByName("View");
-            paths.Clear();
-            temporaryPaths.Clear();
-            circles.Clear();
-            temporaryCircle.Clear();
+            forms.Clear();
+            temporaryForms.Clear();
             view.InvalidateSurface();
         }
 
@@ -123,21 +122,21 @@ namespace mainGUI
                 case SKTouchAction.Pressed:
                     var p = new SKPath();
                     p.MoveTo(e.Location);
-                    temporaryPaths[e.Id] = new ColoredPath { Path = p, Color = color };
+                    temporaryForms[e.Id] = new ColoredPath { Path = p, Color = color };
                     break;
                 //Quand on bouge et qu'on est en train d'appuyer, continuer à dessiner
                 case SKTouchAction.Moved:
                     if (e.InContact)
-                        temporaryPaths[e.Id].Path.LineTo(e.Location);
+                        ((ColoredPath)temporaryForms[e.Id]).Path.LineTo(e.Location);
                     break;
                 //Quand on relache, enregistrer le dessin
                 case SKTouchAction.Released:
-                    paths.Add(temporaryPaths[e.Id]);
-                    temporaryPaths.Remove(e.Id);
+                    forms.Add(temporaryForms[e.Id]);
+                    temporaryForms.Remove(e.Id);
                     break;
                 //Quand on annule, faire disparaitre le dessin
                 case SKTouchAction.Cancelled:
-                    temporaryPaths.Remove(e.Id);
+                    temporaryForms.Remove(e.Id);
                     break;
             }
         }
@@ -148,21 +147,21 @@ namespace mainGUI
             {
                 case SKTouchAction.Pressed:
                     var c = new ColoredCircle { Color = color, Center = e.Location, Radius = 0.1F };
-                    temporaryCircle[e.Id] = c;
+                    temporaryForms[e.Id] = c;
                     break;
                 case SKTouchAction.Moved:
                     if (e.InContact)
                     {
-                        c = temporaryCircle[e.Id];
+                        c = (ColoredCircle) temporaryForms[e.Id];
                         c.Radius = (float)Math.Sqrt(Math.Pow(e.Location.X - c.Center.X, 2) + Math.Pow(e.Location.Y - c.Center.Y, 2));
                     }
                     break;
                 case SKTouchAction.Released:
-                    circles.Add(temporaryCircle[e.Id]);
-                    temporaryCircle.Remove(e.Id);
+                    forms.Add(temporaryForms[e.Id]);
+                    temporaryForms.Remove(e.Id);
                     break;
                 case SKTouchAction.Cancelled:
-                    temporaryCircle.Remove(e.Id);
+                    temporaryForms.Remove(e.Id);
                     break;
             }
         }
