@@ -12,12 +12,14 @@ namespace Hostserver
         public HostServer()
         {
             listener = new HostListener();
+
         }
 
 
         public void StartListening()
         {
             listener.StartNewWhiteboardListener();
+            PackageReceivedHandler.OnReceivePackage += ReceivePackage;
         }
 
         public List<Client> getClientList()
@@ -29,6 +31,22 @@ namespace Hostserver
         {
             PacketSender sender = new PacketSender(sendSocket);
             sender.Send(data);
+        }
+
+        public static void ReceivePackage(Object o, PackageReceivedEventArgs args)
+        {
+            foreach(Client c in ClientController.ClientList)
+            {
+                if (c.Id == args.id)
+                {
+                    continue;
+                }
+                else
+                {
+                    PacketSender sender = new PacketSender(args.socket);
+                    sender.Send(data);
+                }
+            }
         }
 
     }
