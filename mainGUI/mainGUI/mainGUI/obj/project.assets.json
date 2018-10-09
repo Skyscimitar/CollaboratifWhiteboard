@@ -469,6 +469,7 @@
   "projectFileDependencyGroups": {
     ".NETStandard,Version=v2.0": [
       "Hostserver >= 1.0.0",
+
       "NETStandard.Library >= 2.0.3",
       "SkiaSharp >= 1.60.3",
       "SkiaSharp.Views.Forms >= 1.60.3",
@@ -526,6 +527,7 @@
             "version": "[2.0.3, )",
             "autoReferenced": true
           },
+
           "SkiaSharp": {
             "target": "Package",
             "version": "[1.60.3, )"
