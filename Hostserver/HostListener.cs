@@ -29,7 +29,7 @@ namespace Hostserver
          {
              Console.WriteLine("Accepted Connection on port {0}, protocol: {1}", Port, ProtocolType.Tcp);
              Socket NewConnectionSocket = ListenerSocket.EndAccept(ar);
-             //TODO add new  client to the client controller
+             ClientController.AddClient(NewConnectionSocket);
          }
          catch (Exception e)
          {
