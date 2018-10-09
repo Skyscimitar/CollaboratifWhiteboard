@@ -333,6 +333,8 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 
-*/obj
+**/obj/**
 *.cache
 *.targets
+Hostserver/obj
+mainGUI/mainGUI/mainGUI/obj

@@ -44,7 +44,7 @@ namespace Hostserver
                 else
                 {
                     PacketSender sender = new PacketSender(args.socket);
-                    sender.Send(data);
+                    sender.Send(args.data);
                 }
             }
         }
