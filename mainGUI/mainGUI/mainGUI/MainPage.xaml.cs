@@ -14,6 +14,8 @@ namespace mainGUI
     {
         private Dictionary<long,object> temporaryForms =new Dictionary<long,object>();
         private List<object> forms = new List<object>();
+        private Dictionary<string, Dictionary<long, object>> temporaryFormsClients = new Dictionary<string, Dictionary<long, object>>();
+        private Dictionary<string, List<object>> formsClients = new Dictionary<string, List<object>>();
         private string option; //variable stockant l'option choisie par l'utilisateur (trait, gomme, cercle, etc.)
         private SKColor color = SKColors.Black;
 

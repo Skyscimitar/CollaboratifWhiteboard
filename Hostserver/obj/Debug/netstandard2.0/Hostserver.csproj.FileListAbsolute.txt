@@ -7,3 +7,12 @@
 /Users/danieltaylor/Projects/CollaboratifWhiteboard/Hostserver/obj/Debug/netstandard2.0/Hostserver.AssemblyInfo.cs
 /Users/danieltaylor/Projects/CollaboratifWhiteboard/Hostserver/obj/Debug/netstandard2.0/Hostserver.dll
 /Users/danieltaylor/Projects/CollaboratifWhiteboard/Hostserver/obj/Debug/netstandard2.0/Hostserver.pdb
+C:\Users\TEMP\Documents\Centrale\OSY\POOA\Projet\CollaboratifWhiteboard\Hostserver\bin\Debug\netstandard2.0\Hostserver.deps.json
+C:\Users\TEMP\Documents\Centrale\OSY\POOA\Projet\CollaboratifWhiteboard\Hostserver\bin\Debug\netstandard2.0\Hostserver.dll
+C:\Users\TEMP\Documents\Centrale\OSY\POOA\Projet\CollaboratifWhiteboard\Hostserver\bin\Debug\netstandard2.0\Hostserver.pdb
+C:\Users\TEMP\Documents\Centrale\OSY\POOA\Projet\CollaboratifWhiteboard\Hostserver\obj\Debug\netstandard2.0\Hostserver.csprojAssemblyReference.cache
+C:\Users\TEMP\Documents\Centrale\OSY\POOA\Projet\CollaboratifWhiteboard\Hostserver\obj\Debug\netstandard2.0\Hostserver.csproj.CoreCompileInputs.cache
+C:\Users\TEMP\Documents\Centrale\OSY\POOA\Projet\CollaboratifWhiteboard\Hostserver\obj\Debug\netstandard2.0\Hostserver.AssemblyInfoInputs.cache
+C:\Users\TEMP\Documents\Centrale\OSY\POOA\Projet\CollaboratifWhiteboard\Hostserver\obj\Debug\netstandard2.0\Hostserver.AssemblyInfo.cs
+C:\Users\TEMP\Documents\Centrale\OSY\POOA\Projet\CollaboratifWhiteboard\Hostserver\obj\Debug\netstandard2.0\Hostserver.dll
+C:\Users\TEMP\Documents\Centrale\OSY\POOA\Projet\CollaboratifWhiteboard\Hostserver\obj\Debug\netstandard2.0\Hostserver.pdb
