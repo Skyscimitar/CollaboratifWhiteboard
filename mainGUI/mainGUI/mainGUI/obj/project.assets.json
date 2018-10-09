@@ -491,13 +491,13 @@
       "projectName": "mainGUI",
       "projectPath": "/Users/danieltaylor/Projects/CollaboratifWhiteboard/mainGUI/mainGUI/mainGUI/mainGUI.csproj",
       "packagesPath": "/Users/danieltaylor/.nuget/packages/",
-      "outputPath": "/Users/danieltaylor/Projects/CollaboratifWhiteboard/mainGUI/mainGUI/mainGUI/obj/",
+      "outputPath": "/Users/danieltaylor/Projects/CollaboratifWhiteboard/mainGUI/mainGUI/mainGUI/obj",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "/Users/danieltaylor/.nuget/NuGet/NuGet.Config"
+        "/Users/danieltaylor/.config/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netstandard2.0"
@@ -521,25 +521,25 @@
         "dependencies": {
           "LiveXAML": {
             "target": "Package",
-            "version": "[2.1.41, )"
+            "version": "2.1.41"
+          },
+          "SkiaSharp": {
+            "target": "Package",
+            "version": "1.60.3"
+          },
+          "SkiaSharp.Views.Forms": {
+            "target": "Package",
+            "version": "1.60.3"
+          },
+          "Xamarin.Forms": {
+            "target": "Package",
+            "version": "3.2.0.871581"
           },
           "NETStandard.Library": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[2.0.3, )",
+            "version": "2.0.3",
             "autoReferenced": true
-          },
-          "SkiaSharp": {
-            "target": "Package",
-            "version": "[1.60.3, )"
-          },
-          "SkiaSharp.Views.Forms": {
-            "target": "Package",
-            "version": "[1.60.3, )"
-          },
-          "Xamarin.Forms": {
-            "target": "Package",
-            "version": "[3.2.0.871581, )"
           }
         },
         "imports": [
