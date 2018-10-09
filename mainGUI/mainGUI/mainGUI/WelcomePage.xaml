@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="mainGUI.WelcomePage">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" HorizontalOptions="Center" Text="Do you want to host or join a Whiteboard ?" />
+        <Button Grid.Row="1" Text="Host" x:Name="ServerButton" VerticalOptions="Center" HorizontalOptions="Center" Clicked="ServerButton_Clicked" />
+        <Button Grid.Row="2" Text="Join" x:Name="ClientButton" VerticalOptions="Center" HorizontalOptions="Center" Clicked="ClientButton_Clicked" />
+    </Grid>
+</ContentPage>
