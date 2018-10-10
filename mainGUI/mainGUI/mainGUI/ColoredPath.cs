@@ -12,5 +12,6 @@ namespace mainGUI
     {
         public SKColor Color { get; set; }
         public SKPath Path { get; set; }
+        public float StrokeWidth { get; set; }
     }
 }
