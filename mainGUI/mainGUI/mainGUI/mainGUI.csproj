@@ -13,6 +13,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Hostserver\Hostserver.csproj" />
+    <ProjectReference Include="..\..\..\WhiteboardClient\WhiteboardClient.csproj" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="WelcomePage.xaml">

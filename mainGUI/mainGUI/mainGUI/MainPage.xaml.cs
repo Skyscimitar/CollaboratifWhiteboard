@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
+using WhiteboardClient;
+using System.Net.Sockets;
 
 namespace mainGUI
 {
@@ -20,8 +22,13 @@ namespace mainGUI
         private SKColor color = SKColors.Black;
         private float strokeWidth = 5;
 
-        public MainPage()
+        public MainPage(string type)
         {
+            Connector connector = new Connector();
+            if (type == "host")
+                connector.TryConnect("0.0.0.0");
+            else if (type == "client")
+                connector.TryConnect("0.0.0.0");
             InitializeComponent();
         }
 

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-
+using WhiteboardClient;
+using Hostserver;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -20,12 +22,15 @@ namespace mainGUI
 
         private async void ServerButton_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MainPage());
+            HostServer server = new HostServer();
+            Thread sThread = new Thread(server.StartListening);
+            sThread.Start();
+            await Navigation.PushAsync(new MainPage("host"));
         }
 
-        private void ClientButton_Clicked(object sender, EventArgs e)
+        private async void ClientButton_Clicked(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new MainPage("client"));
         }
     }
 }
