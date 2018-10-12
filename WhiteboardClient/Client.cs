@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
-using mainGUI;
 
 
 namespace WhiteboardClient
@@ -23,7 +22,6 @@ namespace WhiteboardClient
             receiver = new PacketReceiver(socket);
             PacketReceivedEventHandler.OnReceivePackage += ReceivePackage;
             receiver.StartReceiving();
-            while (true){}
         }
 
         public void Disconnect()
