@@ -18,6 +18,7 @@ namespace mainGUI
         private Dictionary<string, List<object>> formsClients = new Dictionary<string, List<object>>();
         private string option; //variable stockant l'option choisie par l'utilisateur (trait, gomme, cercle, etc.)
         private SKColor color = SKColors.Black;
+        private float strokeWidth = 5;
 
         public MainPage()
         {
@@ -30,19 +31,16 @@ namespace mainGUI
             var surface = e.Surface;
             var canvas = surface.Canvas;
             canvas.Clear(SKColors.White);
-
             var touchPathStroke = new SKPaint
             {
                 IsAntialias = true,
-                Style = SKPaintStyle.Stroke,
-                StrokeWidth = 5
+                Style = SKPaintStyle.Stroke
             };
 
             var touchCircleStroke = new SKPaint
             {
                 IsAntialias = true,
-                Style = SKPaintStyle.Stroke,
-                StrokeWidth = 5
+                Style = SKPaintStyle.Stroke
             };
 
             foreach (var touchForm in forms)
@@ -50,12 +48,14 @@ namespace mainGUI
                 if (touchForm is ColoredPath touchPath)
                 {
                     touchPathStroke.Color = touchPath.Color;
+                    touchPathStroke.StrokeWidth = touchPath.StrokeWidth;
                     canvas.DrawPath(touchPath.Path, touchPathStroke);
                 }
 
                 if (touchForm is ColoredCircle touchCircle)
                 {
                     touchCircleStroke.Color = touchCircle.Color;
+                    touchCircleStroke.StrokeWidth = touchCircle.StrokeWidth;
                     canvas.DrawCircle(touchCircle.Center, touchCircle.Radius, touchCircleStroke);
                 }
             }
@@ -65,12 +65,14 @@ namespace mainGUI
                 if(touchForm is ColoredPath touchPath)
                 {
                     touchPathStroke.Color = touchPath.Color;
+                    touchPathStroke.StrokeWidth = touchPath.StrokeWidth;
                     canvas.DrawPath(touchPath.Path, touchPathStroke);
                 }
 
                 if(touchForm is ColoredCircle touchCircle)
                 {
                     touchCircleStroke.Color = touchCircle.Color;
+                    touchCircleStroke.StrokeWidth = touchCircle.StrokeWidth;
                     canvas.DrawCircle(touchCircle.Center, touchCircle.Radius, touchCircleStroke);
                 }
             }
@@ -95,15 +97,27 @@ namespace mainGUI
         {
             var button = (Button)sender;
 
-            if (button.Equals(FindByName("PathButton")))
+            if (button.Equals(PathButton))
+            {
                 option = "path";
-            else if (button.Equals(FindByName("RubberButton")))
+                PathButton.BackgroundColor = Color.Gray;
+                RubberButton.BackgroundColor = Color.LightGray;
+                CircleButton.BackgroundColor = Color.LightGray;
+            }
+            else if (button.Equals(RubberButton))
+            {
                 option = "rubber";
-            else if (button.Equals(FindByName("CircleButton")))
+                PathButton.BackgroundColor = Color.LightGray;
+                RubberButton.BackgroundColor = Color.Gray;
+                CircleButton.BackgroundColor = Color.LightGray;
+            }
+            else if (button.Equals(CircleButton))
+            {
                 option = "circle";
-            foreach (Button b in ((Grid)button.Parent).Children)
-                b.BackgroundColor = Color.LightGray;
-            button.BackgroundColor = Color.Gray;
+                PathButton.BackgroundColor = Color.LightGray;
+                RubberButton.BackgroundColor = Color.LightGray;
+                CircleButton.BackgroundColor = Color.Gray;
+            }
         }
 
 
@@ -124,7 +138,7 @@ namespace mainGUI
                 case SKTouchAction.Pressed:
                     var p = new SKPath();
                     p.MoveTo(e.Location);
-                    temporaryForms[e.Id] = new ColoredPath { Path = p, Color = color };
+                    temporaryForms[e.Id] = new ColoredPath { Path = p, Color = color, StrokeWidth=strokeWidth };
                     break;
                 //Quand on bouge et qu'on est en train d'appuyer, continuer à dessiner
                 case SKTouchAction.Moved:
@@ -148,7 +162,7 @@ namespace mainGUI
             switch (e.ActionType)
             {
                 case SKTouchAction.Pressed:
-                    var c = new ColoredCircle { Color = color, Center = e.Location, Radius = 0.1F };
+                    var c = new ColoredCircle { Color = color, Center = e.Location, Radius = 0.1F, StrokeWidth=strokeWidth };
                     temporaryForms[e.Id] = c;
                     break;
                 case SKTouchAction.Moved:
@@ -166,6 +180,11 @@ namespace mainGUI
                     temporaryForms.Remove(e.Id);
                     break;
             }
+        }
+
+        private void StrokeWidth_ValueChanged(object sender, ValueChangedEventArgs e)
+        {
+            strokeWidth = (float)e.NewValue;
         }
     }
 }

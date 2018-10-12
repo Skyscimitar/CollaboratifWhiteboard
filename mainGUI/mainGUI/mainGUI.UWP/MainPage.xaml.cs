@@ -20,7 +20,6 @@ namespace mainGUI.UWP
         public MainPage()
         {
             this.InitializeComponent();
-
             LoadApplication(new mainGUI.App());
         }
     }
