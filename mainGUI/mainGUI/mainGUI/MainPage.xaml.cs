@@ -8,6 +8,7 @@ using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using WhiteboardClient;
 using System.Net.Sockets;
+using System.Diagnostics;
 
 namespace mainGUI
 {
@@ -24,12 +25,12 @@ namespace mainGUI
 
         public MainPage(string type)
         {
+            InitializeComponent();
             Connector connector = new Connector();
             if (type == "host")
-                connector.TryConnect("0.0.0.0");
+                connector.TryConnect("127.0.0.1");
             else if (type == "client")
-                connector.TryConnect("0.0.0.0");
-            InitializeComponent();
+                connector.TryConnect("127.0.0.1");
         }
 
 
