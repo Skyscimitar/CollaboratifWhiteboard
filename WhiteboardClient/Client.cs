@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
+using mainGUI;
 
 
 namespace WhiteboardClient
@@ -14,6 +15,7 @@ namespace WhiteboardClient
     {
         public Socket socket {get; set; }
         public PacketReceiver receiver;
+        private PacketSender sender;
 
         public Client(Socket socket)
         {
@@ -21,6 +23,7 @@ namespace WhiteboardClient
             receiver = new PacketReceiver(socket);
             PacketReceivedEventHandler.OnReceivePackage += ReceivePackage;
             receiver.StartReceiving();
+            while (true){}
         }
 
         public void Disconnect()
@@ -61,7 +64,7 @@ namespace WhiteboardClient
                     ColourHash = (pdict["content"] as Dictionary<string, string>)["colorHash"];
                     Colour= SKColor.Parse(ColourHash);
                     radius = float.Parse((pdict["content"] as Dictionary<string,string>)["radius"]);
-                    coordinates = (pdict["content"] as Dictionary<string, string>)["coorditates"];
+                    coordinates = (pdict["content"] as Dictionary<string, string>)["coordinates"];
                     x = float.Parse(coordinates.Split(' ')[0]);
                     y = float.Parse(coordinates.Split(' ')[0]);
                     point = new SKPoint(x, y);
@@ -73,6 +76,39 @@ namespace WhiteboardClient
                     Console.WriteLine("error parsing received data: {0}", eventArgs.data);
                     break;
             }
+        }
+
+        public void Send(ColoredPath path)
+        {
+            string colourHash = path.Color.ToString();
+            string SVGPath = path.Path.ToSvgPathData();
+            JObject json = new JObject(new JProperty("type", "PATH"), 
+                                       new JProperty("content",new JObject(
+                                          new JProperty("svgpath", SVGPath),
+                                          new JProperty("colorHash", colourHash))));
+            SendPacket(json);
+        }
+
+        public void Send(ColoredCircle circle)
+        {
+            string colourHash = circle.Color.ToString();
+            float x = circle.Center.X;
+            float y = circle.Center.Y;
+            string coordinates = x.ToString() + " " + y.ToString();
+            float radius = circle.Radius;
+            JObject json = new JObject(new JProperty("type", "CIRCLE"),
+                                      new JProperty("content", new JObject(
+                                          new JProperty("colorHash", colourHash),
+                                          new JProperty("coordinates", coordinates),
+                                           new JProperty("radius", radius))));
+            SendPacket(json);
+        }
+
+        private void SendPacket(JObject json)
+        {
+            string Json = json.ToString();
+            sender = new PacketSender(socket);
+            sender.Send(Json);
         }
     }
 }
