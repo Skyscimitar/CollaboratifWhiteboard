@@ -12,9 +12,17 @@ namespace mainGUI
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class ColorPage : Rg.Plugins.Popup.Pages.PopupPage
 	{
-		public ColorPage ()
-		{
-			InitializeComponent ();
-		}
-	}
+        private static Color PickedColor;
+
+        public ColorPage()
+        {
+
+        }
+
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+            PickedColor = ((Button)sender).BackgroundColor;
+            
+        }
+    }
 }
