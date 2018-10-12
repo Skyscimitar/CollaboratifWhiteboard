@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Popup = Rg.Plugins.Popup.Popup;
 
 namespace mainGUI.UWP
 {
@@ -51,6 +52,8 @@ namespace mainGUI.UWP
                 rootFrame = new Frame();
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
+
+                Popup.Init();
 
                 Xamarin.Forms.Forms.Init(e);
 
