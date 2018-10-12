@@ -82,10 +82,12 @@ namespace WhiteboardClient
         {
             string colourHash = path.Color.ToString();
             string SVGPath = path.Path.ToSvgPathData();
+            float strokeWidth = path.StrokeWidth;
             JObject json = new JObject(new JProperty("type", "PATH"), 
                                        new JProperty("content",new JObject(
                                           new JProperty("svgpath", SVGPath),
-                                          new JProperty("colorHash", colourHash))));
+                                          new JProperty("colorHash", colourHash),
+                                          new JProperty("strokeWidth", strokeWidth))));
             SendPacket(json);
         }
 
@@ -95,12 +97,14 @@ namespace WhiteboardClient
             float x = circle.Center.X;
             float y = circle.Center.Y;
             string coordinates = x.ToString() + " " + y.ToString();
+            float strokeWidth = circle.StrokeWidth;
             float radius = circle.Radius;
             JObject json = new JObject(new JProperty("type", "CIRCLE"),
                                       new JProperty("content", new JObject(
                                           new JProperty("colorHash", colourHash),
                                           new JProperty("coordinates", coordinates),
-                                           new JProperty("radius", radius))));
+                                           new JProperty("radius", radius),
+                                           new JProperty("strokeWidth", strokeWidth))));
             SendPacket(json);
         }
 
