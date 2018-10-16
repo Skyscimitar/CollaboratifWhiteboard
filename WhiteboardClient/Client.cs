@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
-using mainGUI;
 
 
 namespace WhiteboardClient
@@ -35,8 +34,7 @@ namespace WhiteboardClient
         void ReceivePackage(Object o, PacketReceivedEventArgs eventArgs)
         {
             // {"type": "PATH", "Content": {...}
-            JObject jObject = JObject.Parse(eventArgs.data);
-            Dictionary<string, object> pdict = jObject.ToObject<Dictionary<string, object>>();
+            Dictionary<string, object> pdict = JsonConvert.DeserializeObject<Dictionary<string, object>>(eventArgs.data);
             SKColor Colour;
             string ColourHash;
             SKPath path;
