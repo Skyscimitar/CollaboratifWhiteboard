@@ -8,6 +8,7 @@ using WhiteboardClient;
 using Hostserver;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.Diagnostics;
 
 namespace mainGUI
 {

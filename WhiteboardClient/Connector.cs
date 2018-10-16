@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using System.Threading;
+using System.Diagnostics;
 
 namespace WhiteboardClient
 {
@@ -25,7 +26,6 @@ namespace WhiteboardClient
                 {
                     Console.WriteLine("Connection exception: {0}", e.ToString());
                 }
-
             }
             SetUpForListening();
         }
