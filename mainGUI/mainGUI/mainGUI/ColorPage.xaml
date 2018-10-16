@@ -6,7 +6,7 @@
              xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
              xmlns:tt="clr-namespace:MainGUI.TouchTracking;assembly=ColorPage"
              xmlns:tt1="clr-namespace:MainGUI.TouchTracking"
-             x:Class="ColorPicker.ColorPickerPopup">
+             x:Class="MainGUI.ColorPage">
 
     <Frame BackgroundColor="White" VerticalOptions="Center" HorizontalOptions="Center">
 

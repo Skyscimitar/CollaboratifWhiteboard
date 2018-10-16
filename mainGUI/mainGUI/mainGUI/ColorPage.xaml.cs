@@ -84,6 +84,7 @@ namespace MainGUI
 
         public ColorPage()
         {
+            InitializeComponent();
         }
 
         public event EventHandler<ColorChangedEventArgs> ColorChanged;
