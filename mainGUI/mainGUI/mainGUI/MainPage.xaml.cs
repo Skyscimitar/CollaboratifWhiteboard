@@ -9,6 +9,7 @@ using SkiaSharp.Views.Forms;
 using WhiteboardClient;
 using System.Net.Sockets;
 using System.Diagnostics;
+using ColoredForms;
 
 namespace mainGUI
 {
@@ -157,7 +158,7 @@ namespace mainGUI
                 //Quand on relache, enregistrer le dessin
                 case SKTouchAction.Released:
                     forms.Add(temporaryForms[e.Id]);
-                    connector.client.Send((WhiteboardClient.ColoredPath) temporaryForms[e.Id]);
+                    connector.client.Send((ColoredPath)temporaryForms[e.Id]);
                     temporaryForms.Remove(e.Id);
                     break;
                 //Quand on annule, faire disparaitre le dessin
@@ -184,7 +185,7 @@ namespace mainGUI
                     break;
                 case SKTouchAction.Released:
                     forms.Add(temporaryForms[e.Id]);
-                    connector.client.Send((WhiteboardClient.ColoredCircle)temporaryForms[e.Id]);
+                    connector.client.Send((ColoredCircle)temporaryForms[e.Id]);
                     temporaryForms.Remove(e.Id);
                     break;
                 case SKTouchAction.Cancelled:

@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
+using ColoredForms;
 
 
 namespace WhiteboardClient
