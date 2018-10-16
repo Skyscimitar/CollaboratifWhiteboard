@@ -20,6 +20,7 @@ namespace Hostserver
             Socket = socket;
             Id = id;
             receiver = new PacketReceiver(socket, id);
+            receiver.StartReceiving();
         }
     }
 }

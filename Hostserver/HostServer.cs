@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 
@@ -12,7 +13,6 @@ namespace Hostserver
         public HostServer()
         {
             listener = new HostListener();
-
         }
 
 
@@ -20,6 +20,9 @@ namespace Hostserver
         {
             listener.StartNewWhiteboardListener();
             PackageReceivedHandler.OnReceivePackage += ReceivePackage;
+            while (true)
+            {
+            }
         }
 
         public List<Client> getClientList()

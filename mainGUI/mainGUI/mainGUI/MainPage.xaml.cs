@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
+using WhiteboardClient;
+using System.Net.Sockets;
+using System.Diagnostics;
+using ColoredForms;
 
 namespace mainGUI
 {
@@ -18,11 +22,17 @@ namespace mainGUI
         private Dictionary<string, List<object>> formsClients = new Dictionary<string, List<object>>();
         private string option; //variable stockant l'option choisie par l'utilisateur (trait, gomme, cercle, etc.)
         private SKColor color = SKColors.Black;
+        private Connector connector;
         private float strokeWidth = 5;
 
-        public MainPage()
+        public MainPage(string type)
         {
             InitializeComponent();
+            connector = new Connector();
+            if (type == "host")
+                connector.TryConnect("127.0.0.1");
+            else if (type == "client")
+                connector.TryConnect("127.0.0.1");
         }
 
 
@@ -148,6 +158,7 @@ namespace mainGUI
                 //Quand on relache, enregistrer le dessin
                 case SKTouchAction.Released:
                     forms.Add(temporaryForms[e.Id]);
+                    connector.client.Send((ColoredPath)temporaryForms[e.Id]);
                     temporaryForms.Remove(e.Id);
                     break;
                 //Quand on annule, faire disparaitre le dessin
@@ -174,6 +185,7 @@ namespace mainGUI
                     break;
                 case SKTouchAction.Released:
                     forms.Add(temporaryForms[e.Id]);
+                    connector.client.Send((ColoredCircle)temporaryForms[e.Id]);
                     temporaryForms.Remove(e.Id);
                     break;
                 case SKTouchAction.Cancelled:
