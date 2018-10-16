@@ -8,6 +8,7 @@ using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Rg.Plugins.Popup;
 using Rg.Plugins.Popup.Services;
+using MainGUI;
 
 namespace mainGUI
 {
@@ -21,10 +22,12 @@ namespace mainGUI
         private string option; //variable stockant l'option choisie par l'utilisateur (trait, gomme, cercle, etc.)
         private SKColor color = SKColors.Black;
         private float strokeWidth = 5;
+        private readonly ColorPage _colorPage;
 
         public MainPage()
         {
             InitializeComponent();
+            _colorPage = new ColorPage();
         }
 
 
@@ -134,7 +137,7 @@ namespace mainGUI
 
         private async void ColorButton_Clicked(object sender, EventArgs e)
         {
-            await PopupNavigation.Instance.PushAsync(new ColorPage());
+            await PopupNavigation.Instance.PushAsync(_colorPage);
         }
 
         private void PathAction(SKTouchEventArgs e, SKColor color)
