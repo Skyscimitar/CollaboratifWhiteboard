@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
+using Rg.Plugins.Popup;
+using Rg.Plugins.Popup.Services;
 
 namespace mainGUI
 {
@@ -130,40 +132,9 @@ namespace mainGUI
             view.InvalidateSurface();
         }
 
-        private void ColorButton_Clicked(object sender, EventArgs e)
+        private async void ColorButton_Clicked(object sender, EventArgs e)
         {
-            ShowPopup();
-        }
-
-        private async void ShowPopup()
-        {
-            //Create `ContentPage` with padding and transparent background
-            ContentPage colorPage = new ContentPage
-            {
-                BackgroundColor = Color.FromHex("#D9000000"),
-                Padding = new Thickness(20, 20, 20, 20),
-                
-            };
-
-            // Create Children
-
-            //Create desired layout to be a content of your popup page. 
-            var contentLayout = new StackLayout
-            {
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                Orientation = StackOrientation.Vertical,
-                Children =
-          {
-              // Add children
-          }
-            };
-
-            //set popup page content:
-            colorPage.Content = contentLayout;
-
-            //Show Popup
-            await Navigation.PushModalAsync(colorPage, false);
+            await PopupNavigation.Instance.PushAsync(new ColorPage());
         }
 
         private void PathAction(SKTouchEventArgs e, SKColor color)
