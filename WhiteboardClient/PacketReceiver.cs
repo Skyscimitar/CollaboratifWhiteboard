@@ -41,7 +41,6 @@ namespace WhiteboardClient
                     _receiveSocket.Receive(_buffer, _buffer.Length, SocketFlags.None);
                     string data = Encoding.Default.GetString(_buffer);
                     //the following line is for debugging only, can be removed after testing
-                    Console.WriteLine(data);
                     //raise an event when a package is received
                     PacketReceivedEventArgs eventArgs = new PacketReceivedEventArgs{data = data, socket = _receiveSocket};
                     PacketReceivedEventHandler.OnReceivePackage(this, eventArgs);

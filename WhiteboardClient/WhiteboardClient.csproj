@@ -9,4 +9,7 @@
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.60.3" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1-beta1" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\mainGUI\ColoredForms\ColoredForms.csproj" />
+  </ItemGroup>
 </Project>
