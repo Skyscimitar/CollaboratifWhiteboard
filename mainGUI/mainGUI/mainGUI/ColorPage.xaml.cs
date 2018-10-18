@@ -23,13 +23,13 @@ namespace MainGUI
         private const int CanvasPadding = 5;
         private bool _colorChanged;
 
-        private readonly SKPaint _clrPickPaint = new SKPaint
+        private readonly SKPaint _colorChoicePaint = new SKPaint
         {
             Style = SKPaintStyle.Fill,
             IsAntialias = true
         };
 
-        private readonly SKPaint _pickedClrPaint = new SKPaint
+        private readonly SKPaint _pickedColorPaint = new SKPaint
         {
             Style = SKPaintStyle.Stroke,
             StrokeWidth = 5,
@@ -110,10 +110,10 @@ namespace MainGUI
             }
 
             // draw the colors
-            foreach (var cp in Colors)
+            foreach (var color in Colors)
             {
-                _clrPickPaint.Color = cp.Color.ToSKColor();
-                canvas.DrawCircle(cp.Position.X, cp.Position.Y, cp.Radius, _clrPickPaint);
+                _colorChoicePaint.Color = color.Color.ToSKColor();
+                canvas.DrawCircle(color.Position.X, color.Position.Y, color.Radius, _colorChoicePaint);
             }
 
             // check if there is a selected color
@@ -121,7 +121,7 @@ namespace MainGUI
 
             // draw the highlight for the picked color
             _pickedClrPaint.Color = _pickedColor.Color.ToSKColor();
-            canvas.DrawCircle(_pickedColor.Position.X, _pickedColor.Position.Y, _pickedColor.Radius + 10, _pickedClrPaint);
+            canvas.DrawCircle(_pickedColor.Position.X, _pickedColor.Position.Y, _pickedColor.Radius + 10, _pickedColorPaint);
 
             if (_colorChanged)
             {
