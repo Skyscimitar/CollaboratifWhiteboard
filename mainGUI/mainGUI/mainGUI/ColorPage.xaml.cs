@@ -120,7 +120,7 @@ namespace MainGUI
             if (_pickedColor == null) { return; }
 
             // draw the highlight for the picked color
-            _pickedClrPaint.Color = _pickedColor.Color.ToSKColor();
+            _pickedColorPaint.Color = _pickedColor.Color.ToSKColor();
             canvas.DrawCircle(_pickedColor.Position.X, _pickedColor.Position.Y, _pickedColor.Radius + 10, _pickedColorPaint);
 
             if (_colorChanged)
