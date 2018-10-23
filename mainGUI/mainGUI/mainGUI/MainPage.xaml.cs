@@ -8,7 +8,7 @@ using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Rg.Plugins.Popup;
 using Rg.Plugins.Popup.Services;
-using MainGUI;
+using System.Globalization;
 
 namespace mainGUI
 {
@@ -20,16 +20,27 @@ namespace mainGUI
         private Dictionary<string, Dictionary<long, object>> temporaryFormsClients = new Dictionary<string, Dictionary<long, object>>();
         private Dictionary<string, List<object>> formsClients = new Dictionary<string, List<object>>();
         private string option; //variable stockant l'option choisie par l'utilisateur (trait, gomme, cercle, etc.)
-        private SKColor color = SKColors.Black;
+        private static SKColor _color  = SKColors.Black;
+        public static Color color
+        {
+            get
+            {
+                return _color.ToFormsColor();
+            }
+            set
+            {
+                _color = value.ToSKColor();
+            }
+        }
         private float strokeWidth = 5;
         private readonly ColorPage _colorPage;
 
         public MainPage()
         {
+            BindingContext = this;
             InitializeComponent();
-            _colorPage = new ColorPage();
+            _colorPage = new ColorPage(ColorButton);
         }
-
 
         private void OnPainting(object sender, SKPaintSurfaceEventArgs e) //méthode définissant ce qui s'affiche à l'écran en temps réel
         {
@@ -89,9 +100,9 @@ namespace mainGUI
             if (option == "rubber")
                 PathAction(e, SKColors.White);
             else if (option == "path")
-                PathAction(e, color);
+                PathAction(e, _color);
             else if (option == "circle")
-                CircleAction(e, color);
+                CircleAction(e, _color);
 
             e.Handled = true;
             ((SKCanvasView)sender).InvalidateSurface();

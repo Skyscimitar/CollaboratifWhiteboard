@@ -1,14 +1,12 @@
 ﻿using System;
-using Xamarin.Forms;
+using System.Collections.Generic;
+using System.Text;
+using SkiaSharp;
 
-namespace MainGUI
+namespace mainGUI
 {
     public class ColorChangedEventArgs : EventArgs
     {
-        public ColorChangedEventArgs(Color color)
-        {
-            this.Color = color;
-        }
-        public Color Color { get; private set; }
+        public SKColor color { get; set; }
     }
 }
