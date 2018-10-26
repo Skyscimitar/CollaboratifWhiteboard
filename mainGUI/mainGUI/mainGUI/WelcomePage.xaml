@@ -8,8 +8,15 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" HorizontalOptions="Center" Text="Do you want to host or join a Whiteboard ?" />
-        <Button Grid.Row="1" Text="Host" x:Name="ServerButton" VerticalOptions="Center" HorizontalOptions="Center" Clicked="ServerButton_Clicked" />
-        <Button Grid.Row="2" Text="Join" x:Name="ClientButton" VerticalOptions="Center" HorizontalOptions="Center" Clicked="ClientButton_Clicked" />
+        <Label Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center" Text="Do you want to host or join a Whiteboard ?" />
+        <Button Grid.Row="1" Text="Host" x:Name="ServerButton" VerticalOptions="Start" HorizontalOptions="Center" Clicked="ServerButton_Clicked" />
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Text="Join" x:Name="ClientButton" VerticalOptions="Start" HorizontalOptions="Center" Clicked="ClientButton_Clicked" />
+            <Entry Grid.Row="1" x:Name="IPEntry" Placeholder="127.0.0.1" Keyboard="Numeric" MaxLength="15" VerticalOptions="Start" HorizontalOptions="Center" Completed="ClientButton_Clicked"/>
+        </Grid>
     </Grid>
 </ContentPage>

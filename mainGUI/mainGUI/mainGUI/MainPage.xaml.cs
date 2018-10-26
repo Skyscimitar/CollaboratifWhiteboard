@@ -41,16 +41,13 @@ namespace mainGUI
         private readonly ColorPage _colorPage;
         private Connector connector;
 
-        public MainPage(string type)
+        public MainPage(string ip)
         {
             BindingContext = this;
             InitializeComponent();
             _colorPage = new ColorPage(this);
             connector = new Connector();
-            if (type == "host")
-                connector.TryConnect("127.0.0.1");
-            else if (type == "client")
-                connector.TryConnect("127.0.0.1");
+            connector.TryConnect(ip);
         }
 
         private void OnPainting(object sender, SKPaintSurfaceEventArgs e) //méthode définissant ce qui s'affiche à l'écran en temps réel
