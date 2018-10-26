@@ -18,7 +18,6 @@ namespace mainGUI
 		public WelcomePage ()
 		{
 			InitializeComponent ();
-
 		}
 
         private async void ServerButton_Clicked(object sender, EventArgs e)
@@ -26,12 +25,28 @@ namespace mainGUI
             HostServer server = new HostServer();
             Thread sThread = new Thread(server.StartListening);
             sThread.Start();
-            await Navigation.PushAsync(new MainPage("host"));
+            await Navigation.PushAsync(new MainPage("127.0.0.1"));
         }
 
         private async void ClientButton_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MainPage("client"));
+            string ip = IPEntry.Text;
+            if (ip != "")
+            {
+                string[] parsedIp = ip.Split('.');
+                if (Int32.TryParse(parsedIp[0], out int n1) && Int32.TryParse(parsedIp[1], out int n2) && Int32.TryParse(parsedIp[2], out int n3) && Int32.TryParse(parsedIp[3], out int n4))
+                {
+                    if (parsedIp.Length == 4 && IsValidOctet(n1) && IsValidOctet(n2) && IsValidOctet(n3) && IsValidOctet(n4))
+                        await Navigation.PushAsync(new MainPage(ip));
+                }
+            }
+            else
+                await Navigation.PushAsync(new MainPage("127.0.0.1"));
+        }
+
+        private bool IsValidOctet(int n)
+        {
+            return (n <= 255 && n >= 0);
         }
     }
 }

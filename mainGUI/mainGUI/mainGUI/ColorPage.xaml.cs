@@ -12,7 +12,6 @@ namespace mainGUI
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ColorPage : PopupPage
     {
-        private readonly Button button;
         private readonly MainPage page;
         public ColorPage(MainPage page)
         {
