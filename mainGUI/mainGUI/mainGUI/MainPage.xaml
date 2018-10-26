@@ -32,7 +32,19 @@
             </Grid.RowDefinitions>
             <Label Grid.Row="0" x:Name="SliderValue" Text="{Binding Source={x:Reference StrokeWidthSlider}, Path=Value, StringFormat='Stroke Width : {0:F0}'}" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" />
             <Slider Grid.Row="1" Maximum="100" Minimum="1" x:Name="StrokeWidthSlider" MaximumTrackColor="DarkGray"  VerticalOptions="Center" HorizontalOptions="Fill" Value="5" ValueChanged="StrokeWidth_ValueChanged"/>
-            <Button Grid.Row="2" x:Name="ColorButton" BackgroundColor="{Binding Source={x:Static local:MainPage.color}}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Clicked="ColorButton_Clicked" />
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="1" Grid.Column="1" x:Name="ColorButton" BackgroundColor="{Binding color}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Clicked="ColorButton_Clicked" />
+            </Grid>
             <Button Grid.Row="3" x:Name="PathButton" Text="Line" BackgroundColor="LightGray" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="OptionButton_Clicked"/>
             <Button Grid.Row="4" x:Name="RubberButton" Text="Rubber" BackgroundColor="LightGray"  VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="OptionButton_Clicked"/>
             <Button Grid.Row="5" x:Name="CircleButton" Text="Circle" BackgroundColor="LightGray" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="OptionButton_Clicked"/>

@@ -13,9 +13,10 @@ namespace mainGUI
     public partial class ColorPage : PopupPage
     {
         private readonly Button button;
-        public ColorPage(Button b)
+        private readonly MainPage page;
+        public ColorPage(MainPage page)
         {
-            button = b;
+            this.page = page;
             InitializeComponent();
         }
 
@@ -28,7 +29,7 @@ namespace mainGUI
         {
             Button button = (Button)sender;
             Color color = button.BackgroundColor;
-            MainPage.color = color;
+            page.color = color;
             button.BackgroundColor = color;
         }
     }

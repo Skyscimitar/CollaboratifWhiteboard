@@ -20,8 +20,8 @@ namespace mainGUI
         private Dictionary<string, Dictionary<long, object>> temporaryFormsClients = new Dictionary<string, Dictionary<long, object>>();
         private Dictionary<string, List<object>> formsClients = new Dictionary<string, List<object>>();
         private string option; //variable stockant l'option choisie par l'utilisateur (trait, gomme, cercle, etc.)
-        private static SKColor _color  = SKColors.Black;
-        public static Color color
+        private SKColor _color  = SKColors.Black;
+        public Color color
         {
             get
             {
@@ -29,6 +29,7 @@ namespace mainGUI
             }
             set
             {
+                ColorButton.BackgroundColor = value;
                 _color = value.ToSKColor();
             }
         }
@@ -39,7 +40,7 @@ namespace mainGUI
         {
             BindingContext = this;
             InitializeComponent();
-            _colorPage = new ColorPage(ColorButton);
+            _colorPage = new ColorPage(this);
         }
 
         private void OnPainting(object sender, SKPaintSurfaceEventArgs e) //méthode définissant ce qui s'affiche à l'écran en temps réel
