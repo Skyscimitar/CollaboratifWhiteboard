@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<popups:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:popups="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+             x:Class="mainGUI.ColorPage">
+
+    <Frame BackgroundColor="White" VerticalOptions="Center" HorizontalOptions="Center">
+
+        <StackLayout Spacing="5">
+
+            <Grid x:Name="ColorGrid" BackgroundColor="White" HeightRequest="348" WidthRequest="250">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button BackgroundColor="#25c5db" Grid.Row="0" Grid.Column="0" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#0098a6" Grid.Row="0" Grid.Column="1" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#0e47a1" Grid.Row="0" Grid.Column="2" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#1665c1" Grid.Row="0" Grid.Column="3" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#039be6" Grid.Row="0" Grid.Column="4" Clicked="ColorButton_Clicked"/>
+
+                <Button BackgroundColor="#64b5f6" Grid.Row="1" Grid.Column="0" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#ff7000" Grid.Row="1" Grid.Column="1" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#ff9f00" Grid.Row="1" Grid.Column="2" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#ffb200" Grid.Row="1" Grid.Column="3" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#cf9702" Grid.Row="1" Grid.Column="4" Clicked="ColorButton_Clicked"/>
+
+                <Button BackgroundColor="#8c6e63" Grid.Row="2" Grid.Column="0" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#6e4c42" Grid.Row="2" Grid.Column="1" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#d52f31" Grid.Row="2" Grid.Column="2" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#ff1643" Grid.Row="2" Grid.Column="3" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#f44236" Grid.Row="2" Grid.Column="4" Clicked="ColorButton_Clicked"/>
+
+                <Button BackgroundColor="#ec407a" Grid.Row="3" Grid.Column="0" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#ad1457" Grid.Row="3" Grid.Column="1" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#6a1b9a" Grid.Row="3" Grid.Column="2" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#ab48bf" Grid.Row="3" Grid.Column="3" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#b968c7" Grid.Row="3" Grid.Column="4" Clicked="ColorButton_Clicked"/>
+
+                <Button BackgroundColor="#00695b" Grid.Row="4" Grid.Column="0" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#00887a" Grid.Row="4" Grid.Column="1" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#4cb6ac" Grid.Row="4" Grid.Column="2" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#307c32" Grid.Row="4" Grid.Column="3" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#43a047" Grid.Row="4" Grid.Column="4" Clicked="ColorButton_Clicked"/>
+
+                <Button BackgroundColor="#64dd16" Grid.Row="5" Grid.Column="0" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#222222" Grid.Row="5" Grid.Column="1" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#5f7c8c" Grid.Row="5" Grid.Column="2" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#b1bec6" Grid.Row="5" Grid.Column="3" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#465a65" Grid.Row="5" Grid.Column="4" Clicked="ColorButton_Clicked"/>
+
+                <Button BackgroundColor="#607d8d" Grid.Row="6" Grid.Column="0" Clicked="ColorButton_Clicked"/>
+                <Button BackgroundColor="#91a5ae" Grid.Row="6" Grid.Column="1" Clicked="ColorButton_Clicked"/>
+            </Grid>
+
+            <Button Text="Close" Clicked="OnClose" BackgroundColor="White" HorizontalOptions="End"></Button>
+        </StackLayout>
+    </Frame>
+
+
+</popups:PopupPage>

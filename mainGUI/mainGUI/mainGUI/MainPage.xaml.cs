@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
+using Rg.Plugins.Popup;
+using Rg.Plugins.Popup.Services;
+using System.Globalization;
 using WhiteboardClient;
 using System.Net.Sockets;
 using System.Diagnostics;
@@ -21,20 +24,34 @@ namespace mainGUI
         private Dictionary<string, Dictionary<long, object>> temporaryFormsClients = new Dictionary<string, Dictionary<long, object>>();
         private Dictionary<string, List<object>> formsClients = new Dictionary<string, List<object>>();
         private string option; //variable stockant l'option choisie par l'utilisateur (trait, gomme, cercle, etc.)
-        private SKColor color = SKColors.Black;
-        private Connector connector;
+        private SKColor _color  = SKColors.Black;
+        public Color color
+        {
+            get
+            {
+                return _color.ToFormsColor();
+            }
+            set
+            {
+                ColorButton.BackgroundColor = value;
+                _color = value.ToSKColor();
+            }
+        }
         private float strokeWidth = 5;
+        private readonly ColorPage _colorPage;
+        private Connector connector;
 
         public MainPage(string type)
         {
+            BindingContext = this;
             InitializeComponent();
+            _colorPage = new ColorPage(this);
             connector = new Connector();
             if (type == "host")
                 connector.TryConnect("127.0.0.1");
             else if (type == "client")
                 connector.TryConnect("127.0.0.1");
         }
-
 
         private void OnPainting(object sender, SKPaintSurfaceEventArgs e) //méthode définissant ce qui s'affiche à l'écran en temps réel
         {
@@ -94,9 +111,9 @@ namespace mainGUI
             if (option == "rubber")
                 PathAction(e, SKColors.White);
             else if (option == "path")
-                PathAction(e, color);
+                PathAction(e, _color);
             else if (option == "circle")
-                CircleAction(e, color);
+                CircleAction(e, _color);
 
             e.Handled = true;
             ((SKCanvasView)sender).InvalidateSurface();
@@ -138,6 +155,11 @@ namespace mainGUI
             forms.Clear();
             temporaryForms.Clear();
             view.InvalidateSurface();
+        }
+
+        private async void ColorButton_Clicked(object sender, EventArgs e)
+        {
+            await PopupNavigation.Instance.PushAsync(_colorPage);
         }
 
         private void PathAction(SKTouchEventArgs e, SKColor color)

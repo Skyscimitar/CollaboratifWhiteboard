@@ -11,5 +11,6 @@ namespace ColoredForms
     public class ColoredPath : ColoredForm
     {
         public SKPath Path { get; set; }
+        public float StrokeWidth { get; set; }
     }
 }
