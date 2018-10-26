@@ -29,7 +29,6 @@ namespace mainGUI
             Button button = (Button)sender;
             Color color = button.BackgroundColor;
             page.color = color;
-            button.BackgroundColor = color;
         }
     }
 }
