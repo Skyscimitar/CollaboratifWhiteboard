@@ -9,6 +9,10 @@ using SkiaSharp.Views.Forms;
 using Rg.Plugins.Popup;
 using Rg.Plugins.Popup.Services;
 using System.Globalization;
+using WhiteboardClient;
+using System.Net.Sockets;
+using System.Diagnostics;
+using ColoredForms;
 
 namespace mainGUI
 {
@@ -35,12 +39,18 @@ namespace mainGUI
         }
         private float strokeWidth = 5;
         private readonly ColorPage _colorPage;
+        private Connector connector;
 
-        public MainPage()
+        public MainPage(string type)
         {
             BindingContext = this;
             InitializeComponent();
             _colorPage = new ColorPage(this);
+            connector = new Connector();
+            if (type == "host")
+                connector.TryConnect("127.0.0.1");
+            else if (type == "client")
+                connector.TryConnect("127.0.0.1");
         }
 
         private void OnPainting(object sender, SKPaintSurfaceEventArgs e) //méthode définissant ce qui s'affiche à l'écran en temps réel
@@ -170,6 +180,7 @@ namespace mainGUI
                 //Quand on relache, enregistrer le dessin
                 case SKTouchAction.Released:
                     forms.Add(temporaryForms[e.Id]);
+                    connector.client.Send((ColoredPath)temporaryForms[e.Id]);
                     temporaryForms.Remove(e.Id);
                     break;
                 //Quand on annule, faire disparaitre le dessin
@@ -196,6 +207,7 @@ namespace mainGUI
                     break;
                 case SKTouchAction.Released:
                     forms.Add(temporaryForms[e.Id]);
+                    connector.client.Send((ColoredCircle)temporaryForms[e.Id]);
                     temporaryForms.Remove(e.Id);
                     break;
                 case SKTouchAction.Cancelled:
@@ -208,6 +220,5 @@ namespace mainGUI
         {
             strokeWidth = (float)e.NewValue;
         }
-
     }
 }

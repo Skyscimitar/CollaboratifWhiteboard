@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Net;
+using System.Diagnostics;
 
 namespace Hostserver
 {
@@ -42,7 +43,8 @@ namespace Hostserver
                     //everything is received, now we convert the data:
                     string data = Encoding.Default.GetString(_buffer);
                     // the following line can be removed after testing
-                    Console.WriteLine(data);
+                    Debug.WriteLine("received from client");
+                    Debug.WriteLine(data);
                     // raise the received package data with appropriate context information
                     PackageReceivedEventArgs eventArgs = new PackageReceivedEventArgs{data = data, id = Id, socket = _receiveSocket};
                     PackageReceivedHandler.OnReceivePackage(this, eventArgs);

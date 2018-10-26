@@ -48,8 +48,8 @@
             <Button Grid.Row="3" x:Name="PathButton" Text="Line" BackgroundColor="LightGray" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="OptionButton_Clicked"/>
             <Button Grid.Row="4" x:Name="RubberButton" Text="Rubber" BackgroundColor="LightGray"  VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="OptionButton_Clicked"/>
             <Button Grid.Row="5" x:Name="CircleButton" Text="Circle" BackgroundColor="LightGray" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="OptionButton_Clicked"/>
-            <Button Grid.Row="6" x:Name="ClearButton" Text="Clear" BackgroundColor="LightGray" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="ClearButton_Clicked"/>
-        </Grid>
+        <Button Grid.Row="6" x:Name="ClearButton" Text="Clear" BackgroundColor="LightGray" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="ClearButton_Clicked"/>
+    </Grid>
         <!--Le canvas permettant de dessiner dessus.-->
         <views:SKCanvasView x:Name="View" Grid.Row="0" Grid.Column="1" PaintSurface="OnPainting" EnableTouchEvents="True" Touch="SKCanvasView_Touch" />
     </Grid>

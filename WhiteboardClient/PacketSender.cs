@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
+using System.Diagnostics;
 namespace WhiteboardClient
 {
     public class PacketSender
@@ -15,6 +16,8 @@ namespace WhiteboardClient
 
         public void Send(string data)
         {
+            Debug.WriteLine("Sending to server:");
+            Debug.WriteLine(data);
             try
             {
                 var fullPacket = new List<byte>();

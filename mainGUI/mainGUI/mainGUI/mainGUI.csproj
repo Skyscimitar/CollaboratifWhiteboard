@@ -12,9 +12,12 @@
     <PackageReference Include="SkiaSharp.Views" Version="1.60.3" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.60.3" />
     <PackageReference Include="Xamarin.Forms" Version="3.2.0.871581" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Hostserver\Hostserver.csproj" />
+    <ProjectReference Include="..\..\..\WhiteboardClient\WhiteboardClient.csproj" />
+    <ProjectReference Include="..\..\ColoredForms\ColoredForms.csproj" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="ColorPage.xaml">

@@ -4,13 +4,11 @@ using System.Text;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 
-namespace mainGUI
+namespace ColoredForms
 {
-    public class ColoredCircle
+    public class ColoredCircle : ColoredForm
     {
-        public SKColor Color { get; set; }
         public SKPoint Center { get; set; }
         public float Radius { get; set; }
-        public float StrokeWidth { get; set; }
     }
 }
