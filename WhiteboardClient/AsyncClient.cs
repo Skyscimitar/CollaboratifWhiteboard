@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
-using System.Net.NetworkInformation;
 using System.Threading;
 using System.Text;
 using Newtonsoft.Json;
@@ -45,12 +44,6 @@ namespace WhiteboardClient
 
         public void StartClient()
         {
-            Ping pinger = new Ping();
-            PingReply reply = pinger.Send(this.IpAddress);
-            if (reply.Status != IPStatus.Success)
-            {
-                throw new DiscoverHostException(message: "Couldn't ping host");
-            }
             Client.BeginConnect(RemoteEndPoint, new AsyncCallback(ConnectCallback), Client);
             connectDone.WaitOne();
             Receiver = new PacketReceiver(Client);
