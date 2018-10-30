@@ -57,10 +57,8 @@ namespace WhiteboardClient
             try
             {
                 Client = (Socket)ar.AsyncState;
-                Debug.WriteLine(Client.ToString());
-                Debug.WriteLine(Client.RemoteEndPoint.Serialize());
                 Client.EndConnect(ar);
-                Debug.WriteLine("Socket connected to : {0}", Client.RemoteEndPoint.ToString());
+                Debug.WriteLine("Socket connected to : {0}", Client.RemoteEndPoint);
 
                 connectDone.Set();
             } catch (Exception e)
@@ -82,14 +80,14 @@ namespace WhiteboardClient
             string coordinates;
             float x;
             float y;
-            SKPoint start;
-            SKPoint end;
+            float strokeWidth;
+            float radius;
             float x1;
             float x2;
             float y1;
             float y2;
-            float strokeWidth;
-            float radius;
+            SKPoint start;
+            SKPoint end;
             UpdateUIEventArgs UiEventArgs;
 
             switch (pdict["type"])
@@ -105,16 +103,17 @@ namespace WhiteboardClient
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "CIRCLE":
+                    Debug.WriteLine("Here");
                     content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
                     ColourHash = content["colorHash"];
                     Colour = SKColor.Parse(ColourHash);
                     radius = float.Parse(content["radius"]);
                     coordinates = content["coordinates"];
                     x = float.Parse(coordinates.Split(' ')[0]);
-                    y = float.Parse(coordinates.Split(' ')[0]);
+                    y = float.Parse(coordinates.Split(' ')[1]);
                     point = new SKPoint(x, y);
                     strokeWidth = float.Parse(content["strokeWidth"]);
-                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, radius = radius, point = point, strokeWidth = strokeWidth };
+                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, radius = radius, point = point, strokeWidth = strokeWidth, type="CIRCLE" };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "LINE":

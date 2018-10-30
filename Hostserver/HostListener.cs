@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Diagnostics;
 using System.Threading;
 
 namespace Hostserver
@@ -17,7 +18,7 @@ namespace Hostserver
 
         public void StartNewWhiteboardListener()
         {
-            Console.WriteLine("Started Listening on port {0}, protocol: {1}");
+            Debug.WriteLine("Server:Started Listening on port {0}, protocol: {1}", Port, ProtocolType.Tcp);
             ListenerSocket.Bind(new IPEndPoint(IPAddress.Any, Port));
             ListenerSocket.Listen(10);
             ListenerSocket.BeginAccept(AcceptNewConnection, ListenerSocket);
@@ -27,13 +28,14 @@ namespace Hostserver
         {
          try 
          {
-             Console.WriteLine("Accepted Connection on port {0}, protocol: {1}", Port, ProtocolType.Tcp);
+             Debug.WriteLine("Server:Accepted Connection on port {0}, protocol: {1}", Port, ProtocolType.Tcp);
              Socket NewConnectionSocket = ListenerSocket.EndAccept(ar);
              ClientController.AddClient(NewConnectionSocket);
+             ListenerSocket.BeginAccept(AcceptNewConnection, ListenerSocket);
          }
          catch (Exception e)
          {
-             Console.WriteLine(e.ToString());
+             Debug.WriteLine(e.ToString());
          } 
         }
     }
