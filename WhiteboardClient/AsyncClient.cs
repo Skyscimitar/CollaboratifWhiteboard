@@ -82,6 +82,12 @@ namespace WhiteboardClient
             float y;
             float strokeWidth;
             float radius;
+            float x1;
+            float x2;
+            float y1;
+            float y2;
+            SKPoint start;
+            SKPoint end;
             UpdateUIEventArgs UiEventArgs;
 
             switch (pdict["type"])
@@ -109,6 +115,20 @@ namespace WhiteboardClient
                     strokeWidth = float.Parse(content["strokeWidth"]);
                     UiEventArgs = new UpdateUIEventArgs { colour = Colour, radius = radius, point = point, strokeWidth = strokeWidth, type="CIRCLE" };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
+                    break;
+                case "LINE":
+                    content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
+                    ColourHash = content["colorHash"];
+                    Colour = SKColor.Parse(ColourHash);
+                    strokeWidth = float.Parse(content["strokeWidth"]);
+                    coordinates = content["coordinates"];
+                    x1 = float.Parse(coordinates.Split(' ')[0]);
+                    x2 = float.Parse(coordinates.Split(' ')[1]);
+                    y1 = float.Parse(coordinates.Split(' ')[2]);
+                    y2 = float.Parse(coordinates.Split(' ')[3]);
+                    start = new SKPoint(x1, y1);
+                    end = new SKPoint(x2, y2);
+                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, start = start, end = end, strokeWidth = strokeWidth };
                     break;
                 default:
                     Console.WriteLine("error parsing received data: {0}", eventArgs.data);
@@ -151,6 +171,23 @@ namespace WhiteboardClient
                                           new JProperty("svgpath", SVGPath),
                                           new JProperty("colorHash", colourHash),
                                           new JProperty("strokeWidth", strokeWidth))));
+            SendData(json);
+        }
+
+        public void Send(ColoredLine line)
+        {
+            string colourHash = line.Color.ToString();
+            float strokeWidth = line.StrokeWidth;
+            float x1 = line.Start.X;
+            float x2 = line.End.X;
+            float y1 = line.Start.Y;
+            float y2 = line.Start.Y;
+            string coordinates = x1.ToString() + " " + x2.ToString() + " " + y1.ToString() + " " + y2.ToString();
+            JObject json = new JObject(new JProperty("type", "LINE"),
+                new JProperty("content", new JObject(
+                    new JProperty("colorHash", colourHash),
+                    new JProperty("coordinates", coordinates),
+                    new JProperty("strokeWidth", strokeWidth))));
             SendData(json);
         }
     }

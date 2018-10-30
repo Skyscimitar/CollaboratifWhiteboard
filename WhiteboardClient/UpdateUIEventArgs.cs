@@ -9,6 +9,8 @@ namespace WhiteboardClient
         public SKPath path { get; set; }
         public SKColor colour { get; set; }
         public SKPoint point { get; set; }
+        public SKPoint start { get; set; }
+        public SKPoint end { get; set; }
         public float strokeWidth { get; set; }
         public float radius { get; set; }
         public string type { get; set; }
