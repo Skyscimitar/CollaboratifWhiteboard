@@ -31,7 +31,7 @@ namespace mainGUI
         private async void ClientButton_Clicked(object sender, EventArgs e)
         {
             string ip = IPEntry.Text;
-            if (ip != "")
+            if (ip != "" && ip != null)
             {
                 string[] parsedIp = ip.Split('.');
                 if (Int32.TryParse(parsedIp[0], out int n1) && Int32.TryParse(parsedIp[1], out int n2) && Int32.TryParse(parsedIp[2], out int n3) && Int32.TryParse(parsedIp[3], out int n4))

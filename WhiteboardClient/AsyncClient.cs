@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -7,10 +8,12 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ColoredForms;
+using SkiaSharp.Views.Forms;
+using SkiaSharp;
 
 namespace WhiteboardClient
 {
-    class AsyncClient
+    public class AsyncClient
     {
 
         private const int port = 8080;
@@ -44,6 +47,7 @@ namespace WhiteboardClient
             Client.BeginConnect(RemoteEndPoint, new AsyncCallback(ConnectCallback), Client);
             connectDone.WaitOne();
             Receiver = new PacketReceiver(Client);
+            PacketReceivedEventHandler.OnReceivePackage += ReceivePackage;
             Thread receiveThread = new Thread(Receiver.StartReceiving);
             receiveThread.Start();
         }
@@ -54,11 +58,60 @@ namespace WhiteboardClient
             {
                 Client = (Socket)ar.AsyncState;
                 Client.EndConnect(ar);
-                Console.WriteLine("Socket connected to : {0}", Client.RemoteEndPoint.ToString());
+                Debug.WriteLine("Socket connected to : {0}", Client.RemoteEndPoint.ToString());
+
                 connectDone.Set();
             } catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                Debug.WriteLine(e.ToString());
+            }
+        }
+
+        private void ReceivePackage(Object o, PacketReceivedEventArgs eventArgs)
+        {
+            Debug.WriteLine("Received Package");
+            Dictionary<string, object> pdict = JsonConvert.DeserializeObject<Dictionary<string, object>>(eventArgs.data);
+            Dictionary<string, string> content;
+            SKColor Colour;
+            string ColourHash;
+            SKPath path;
+            string SVGpath;
+            SKPoint point;
+            string coordinates;
+            float x;
+            float y;
+            float strokeWidth;
+            float radius;
+            UpdateUIEventArgs UiEventArgs;
+
+            switch (pdict["type"])
+            {
+                case "PATH":
+                    content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
+                    SVGpath = content["svgpath"].ToString();
+                    path = SKPath.ParseSvgPathData(SVGpath);
+                    ColourHash = content["colorHash"];
+                    Colour = SKColor.Parse(ColourHash);
+                    strokeWidth = float.Parse(content["strokeWidth"]);
+                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, path = path, type = "PATH", strokeWidth = strokeWidth };
+                    UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
+                    break;
+                case "CIRCLE":
+                    content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
+                    ColourHash = content["colorHash"];
+                    Colour = SKColor.Parse(ColourHash);
+                    radius = float.Parse(content["radius"]);
+                    coordinates = content["coordinates"];
+                    x = float.Parse(coordinates.Split(' ')[0]);
+                    y = float.Parse(coordinates.Split(' ')[0]);
+                    point = new SKPoint(x, y);
+                    strokeWidth = float.Parse(content["strokeWidth"]);
+                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, radius = radius, point = point, strokeWidth = strokeWidth };
+                    UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
+                    break;
+                default:
+                    Console.WriteLine("error parsing received data: {0}", eventArgs.data);
+                    break;
             }
         }
 

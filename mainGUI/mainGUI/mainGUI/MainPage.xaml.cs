@@ -39,15 +39,32 @@ namespace mainGUI
         }
         private float strokeWidth = 5;
         private readonly ColorPage _colorPage;
-        private Connector connector;
+        private AsyncClient asyncClient;
 
         public MainPage(string ip)
         {
             BindingContext = this;
             InitializeComponent();
+            UpdateUIEventHandler.OnUpdateUI += UpdateUi;
             _colorPage = new ColorPage(this);
-            connector = new Connector();
-            connector.TryConnect(ip);
+            asyncClient = new AsyncClient(ip);
+            asyncClient.StartClient();
+        }
+
+        private void UpdateUi(Object o, UpdateUIEventArgs eventArgs)
+        {
+            switch (eventArgs.type)
+            {
+                case "PATH":
+                    ColoredPath coloredPath = new ColoredPath { Path = eventArgs.path, Color = eventArgs.colour, StrokeWidth = strokeWidth };
+                    forms.Add(coloredPath);
+                    break;
+                case "CIRCLE":
+                    ColoredCircle coloredCircle = new ColoredCircle { Radius = eventArgs.radius, StrokeWidth = eventArgs.strokeWidth, Center = eventArgs.point, Color = eventArgs.colour };
+                    forms.Add(coloredCircle);
+                    break;
+            }
+            Debug.WriteLine("event triggered and handled");
         }
 
         private void OnPainting(object sender, SKPaintSurfaceEventArgs e) //méthode définissant ce qui s'affiche à l'écran en temps réel
@@ -177,7 +194,7 @@ namespace mainGUI
                 //Quand on relache, enregistrer le dessin
                 case SKTouchAction.Released:
                     forms.Add(temporaryForms[e.Id]);
-                    connector.client.Send((ColoredPath)temporaryForms[e.Id]);
+                    asyncClient.Send((ColoredPath)temporaryForms[e.Id]);
                     temporaryForms.Remove(e.Id);
                     break;
                 //Quand on annule, faire disparaitre le dessin
@@ -204,7 +221,7 @@ namespace mainGUI
                     break;
                 case SKTouchAction.Released:
                     forms.Add(temporaryForms[e.Id]);
-                    connector.client.Send((ColoredCircle)temporaryForms[e.Id]);
+                    asyncClient.Send((ColoredCircle)temporaryForms[e.Id]);
                     temporaryForms.Remove(e.Id);
                     break;
                 case SKTouchAction.Cancelled:
