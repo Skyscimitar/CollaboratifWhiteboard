@@ -75,6 +75,7 @@ namespace mainGUI
                     forms.Add(coloredCircle);
                     break;
                 case "LINE":
+                    Debug.WriteLine("here");
                     ColoredLine coloredLine = new ColoredLine
                     {
                         Color = eventArgs.colour,
