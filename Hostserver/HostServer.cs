@@ -10,9 +10,9 @@ namespace Hostserver
     {
         private HostListener listener;
 
-        public HostServer()
+        public HostServer(double size_x, double size_y)
         {
-            listener = new HostListener();
+            listener = new HostListener(size_x, size_y);
         }
 
 

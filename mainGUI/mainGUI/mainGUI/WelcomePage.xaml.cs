@@ -24,7 +24,7 @@ namespace mainGUI
 
         private async void ServerButton_Clicked(object sender, EventArgs e)
         {
-            HostServer server = new HostServer();
+            HostServer server = new HostServer(this.Width,this.Height);
             Thread sThread = new Thread(server.StartListening);
             sThread.Start();
             await Navigation.PushAsync(new MainPage("127.0.0.1"));

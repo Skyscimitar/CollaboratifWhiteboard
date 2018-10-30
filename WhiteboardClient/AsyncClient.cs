@@ -131,6 +131,13 @@ namespace WhiteboardClient
                     UiEventArgs = new UpdateUIEventArgs { colour = Colour, start = start, end = end, strokeWidth = strokeWidth, type="LINE"};
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
+                case "SIZE":
+                    content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
+                    float w = float.Parse(content["width"]);
+                    float h = float.Parse(content["height"]);
+                    UiEventArgs = new UpdateUIEventArgs { width = w, height = h, type = "SIZE" };
+                    UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
+                    break;
                 default:
                     Console.WriteLine("error parsing received data: {0}", eventArgs.data);
                     break;
