@@ -9,6 +9,8 @@ using Hostserver;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using System.Diagnostics;
+using System.Net.NetworkInformation;
+using System.Net;
 
 namespace mainGUI
 {
@@ -37,7 +39,12 @@ namespace mainGUI
                 if (Int32.TryParse(parsedIp[0], out int n1) && Int32.TryParse(parsedIp[1], out int n2) && Int32.TryParse(parsedIp[2], out int n3) && Int32.TryParse(parsedIp[3], out int n4))
                 {
                     if (parsedIp.Length == 4 && IsValidOctet(n1) && IsValidOctet(n2) && IsValidOctet(n3) && IsValidOctet(n4))
+                    {
+                        Ping pinger = new Ping();
+                        PingReply reply = pinger.Send(IPAddress.Parse(ip));
+                        Debug.WriteLine(reply.Status == IPStatus.Success);
                         await Navigation.PushAsync(new MainPage(ip));
+                    }
                 }
             }
             else
