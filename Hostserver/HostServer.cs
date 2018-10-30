@@ -40,7 +40,7 @@ namespace Hostserver
         {
             foreach(Client c in ClientController.ClientList)
             {
-                PacketSender sender = new PacketSender(args.socket);
+                PacketSender sender = new PacketSender(c.Socket);
                 sender.Send(args.data);
                 Debug.WriteLine("Transferred");
             }

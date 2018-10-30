@@ -64,6 +64,7 @@ namespace mainGUI
                     forms.Add(coloredCircle);
                     break;
             }
+            View.InvalidateSurface();
             Debug.WriteLine("event triggered and handled");
         }
 

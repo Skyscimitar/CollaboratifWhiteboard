@@ -103,7 +103,7 @@ namespace WhiteboardClient
                     radius = float.Parse(content["radius"]);
                     coordinates = content["coordinates"];
                     x = float.Parse(coordinates.Split(' ')[0]);
-                    y = float.Parse(coordinates.Split(' ')[0]);
+                    y = float.Parse(coordinates.Split(' ')[1]);
                     point = new SKPoint(x, y);
                     strokeWidth = float.Parse(content["strokeWidth"]);
                     UiEventArgs = new UpdateUIEventArgs { colour = Colour, radius = radius, point = point, strokeWidth = strokeWidth };
