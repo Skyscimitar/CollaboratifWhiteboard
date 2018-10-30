@@ -129,6 +129,7 @@ namespace WhiteboardClient
                     start = new SKPoint(x1, y1);
                     end = new SKPoint(x2, y2);
                     UiEventArgs = new UpdateUIEventArgs { colour = Colour, start = start, end = end, strokeWidth = strokeWidth, type="LINE"};
+                    UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 default:
                     Console.WriteLine("error parsing received data: {0}", eventArgs.data);
@@ -181,7 +182,7 @@ namespace WhiteboardClient
             float x1 = line.Start.X;
             float x2 = line.End.X;
             float y1 = line.Start.Y;
-            float y2 = line.Start.Y;
+            float y2 = line.End.Y;
             string coordinates = x1.ToString() + " " + x2.ToString() + " " + y1.ToString() + " " + y2.ToString();
             JObject json = new JObject(new JProperty("type", "LINE"),
                 new JProperty("content", new JObject(
