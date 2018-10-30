@@ -33,6 +33,8 @@ namespace mainGUI.UWP
             }
             if(e.OldElement != null)
             {
+                var nativeCtrl = this;
+                
             }
             if (e.NewElement != null)
             {

@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Diagnostics;
 using System.Net.Sockets;
 
 namespace WhiteboardClient
@@ -58,7 +59,9 @@ namespace WhiteboardClient
                 else
                     StartReceiving();
             }
+            StartReceiving();
         }
+
 
         public void Disconnect()
         {
