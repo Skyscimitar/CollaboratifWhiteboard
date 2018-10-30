@@ -191,14 +191,17 @@ namespace mainGUI
                     break;
                 //Quand on bouge et qu'on est en train d'appuyer, continuer à dessiner
                 case SKTouchAction.Moved:
-                    if (e.InContact)
+                    if (e.InContact && temporaryForms.ContainsKey(e.Id))
                         ((ColoredPath)temporaryForms[e.Id]).Path.LineTo(e.Location);
                     break;
                 //Quand on relache, enregistrer le dessin
                 case SKTouchAction.Released:
-                    forms.Add(temporaryForms[e.Id]);
-                    asyncClient.Send((ColoredPath)temporaryForms[e.Id]);
-                    temporaryForms.Remove(e.Id);
+                    if (temporaryForms.ContainsKey(e.Id))
+                    {
+                        forms.Add(temporaryForms[e.Id]);
+                        asyncClient.Send((ColoredPath)temporaryForms[e.Id]);
+                        temporaryForms.Remove(e.Id);
+                    }
                     break;
                 //Quand on annule, faire disparaitre le dessin
                 case SKTouchAction.Cancelled:
@@ -216,16 +219,19 @@ namespace mainGUI
                     temporaryForms[e.Id] = c;
                     break;
                 case SKTouchAction.Moved:
-                    if (e.InContact)
+                    if (e.InContact && temporaryForms.ContainsKey(e.Id))
                     {
                         c = (ColoredCircle) temporaryForms[e.Id];
                         c.Radius = (float)Math.Sqrt(Math.Pow(e.Location.X - c.Center.X, 2) + Math.Pow(e.Location.Y - c.Center.Y, 2));
                     }
                     break;
                 case SKTouchAction.Released:
-                    forms.Add(temporaryForms[e.Id]);
-                    asyncClient.Send((ColoredCircle)temporaryForms[e.Id]);
-                    temporaryForms.Remove(e.Id);
+                    if (temporaryForms.ContainsKey(e.Id))
+                    {
+                        forms.Add(temporaryForms[e.Id]);
+                        asyncClient.Send((ColoredCircle)temporaryForms[e.Id]);
+                        temporaryForms.Remove(e.Id);
+                    }
                     break;
                 case SKTouchAction.Cancelled:
                     temporaryForms.Remove(e.Id);
