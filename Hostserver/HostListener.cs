@@ -31,6 +31,7 @@ namespace Hostserver
              Debug.WriteLine("Server:Accepted Connection on port {0}, protocol: {1}", Port, ProtocolType.Tcp);
              Socket NewConnectionSocket = ListenerSocket.EndAccept(ar);
              ClientController.AddClient(NewConnectionSocket);
+             ListenerSocket.BeginAccept(AcceptNewConnection, ListenerSocket);
          }
          catch (Exception e)
          {

@@ -58,7 +58,6 @@ namespace WhiteboardClient
             {
                 Client = (Socket)ar.AsyncState;
                 Client.EndConnect(ar);
-                Debug.WriteLine(Client.RemoteEndPoint.ToString());
                 Debug.WriteLine("Socket connected to : {0}", Client.RemoteEndPoint);
 
                 connectDone.Set();

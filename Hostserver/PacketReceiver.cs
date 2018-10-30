@@ -63,6 +63,7 @@ namespace Hostserver
                 else
                     StartReceiving();
             }
+            StartReceiving();
        }
 
         private void Disconnect()

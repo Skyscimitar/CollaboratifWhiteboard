@@ -40,16 +40,9 @@ namespace Hostserver
         {
             foreach(Client c in ClientController.ClientList)
             {
-                if (c.Id == args.id)
-                {
-                    continue;
-                }
-                else
-                {
-                    PacketSender sender = new PacketSender(args.socket);
-                    sender.Send(args.data);
-                    Debug.WriteLine("Transferred");
-                }
+                PacketSender sender = new PacketSender(args.socket);
+                sender.Send(args.data);
+                Debug.WriteLine("Transferred");
             }
         }
 

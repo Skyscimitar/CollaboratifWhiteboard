@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Diagnostics;
 using System.Net.Sockets;
 
 namespace WhiteboardClient
@@ -37,6 +38,7 @@ namespace WhiteboardClient
             {
                 if(_receiveSocket.EndReceive(ar)>1)
                 {
+                    Debug.WriteLine("Ahhhhhhhh!");
                     _buffer = new byte[BitConverter.ToInt32(_buffer, 0)];
                     _receiveSocket.Receive(_buffer, _buffer.Length, SocketFlags.None);
                     string data = Encoding.Default.GetString(_buffer);
@@ -58,7 +60,9 @@ namespace WhiteboardClient
                 else
                     StartReceiving();
             }
+            StartReceiving();
         }
+
 
         public void Disconnect()
         {
