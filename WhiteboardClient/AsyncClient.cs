@@ -128,7 +128,7 @@ namespace WhiteboardClient
                     y2 = float.Parse(coordinates.Split(' ')[3]);
                     start = new SKPoint(x1, y1);
                     end = new SKPoint(x2, y2);
-                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, start = start, end = end, strokeWidth = strokeWidth };
+                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, start = start, end = end, strokeWidth = strokeWidth, type="LINE"};
                     break;
                 default:
                     Console.WriteLine("error parsing received data: {0}", eventArgs.data);
