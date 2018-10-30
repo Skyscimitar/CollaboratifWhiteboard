@@ -38,7 +38,6 @@ namespace WhiteboardClient
             {
                 if(_receiveSocket.EndReceive(ar)>1)
                 {
-                    Debug.WriteLine("Ahhhhhhhh!");
                     _buffer = new byte[BitConverter.ToInt32(_buffer, 0)];
                     _receiveSocket.Receive(_buffer, _buffer.Length, SocketFlags.None);
                     string data = Encoding.Default.GetString(_buffer);

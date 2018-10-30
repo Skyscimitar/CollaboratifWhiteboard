@@ -56,10 +56,12 @@ namespace mainGUI
             switch (eventArgs.type)
             {
                 case "PATH":
-                    ColoredPath coloredPath = new ColoredPath { Path = eventArgs.path, Color = eventArgs.colour, StrokeWidth = strokeWidth };
+                    ColoredPath coloredPath = new ColoredPath { Path = eventArgs.path, Color = eventArgs.colour, StrokeWidth = eventArgs.strokeWidth };
                     forms.Add(coloredPath);
                     break;
                 case "CIRCLE":
+                    Debug.WriteLine("Center: " + eventArgs.point.X + " " + eventArgs.point.Y);
+                    Debug.WriteLine("Radius: " + eventArgs.radius);
                     ColoredCircle coloredCircle = new ColoredCircle { Radius = eventArgs.radius, StrokeWidth = eventArgs.strokeWidth, Center = eventArgs.point, Color = eventArgs.colour };
                     forms.Add(coloredCircle);
                     break;

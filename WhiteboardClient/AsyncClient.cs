@@ -97,6 +97,7 @@ namespace WhiteboardClient
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "CIRCLE":
+                    Debug.WriteLine("Here");
                     content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
                     ColourHash = content["colorHash"];
                     Colour = SKColor.Parse(ColourHash);
@@ -106,7 +107,7 @@ namespace WhiteboardClient
                     y = float.Parse(coordinates.Split(' ')[1]);
                     point = new SKPoint(x, y);
                     strokeWidth = float.Parse(content["strokeWidth"]);
-                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, radius = radius, point = point, strokeWidth = strokeWidth };
+                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, radius = radius, point = point, strokeWidth = strokeWidth, type="CIRCLE" };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 default:
