@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using Xamarin.Forms;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
@@ -87,6 +87,7 @@ namespace mainGUI
                 Style = SKPaintStyle.Stroke
             };
 
+            Thread.Sleep(3);
             foreach (var touchForm in forms)
             {
                 if (touchForm is ColoredPath touchPath)
