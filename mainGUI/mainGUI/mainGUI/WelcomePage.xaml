@@ -15,8 +15,13 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button Grid.Row="0" Text="Join" x:Name="ClientButton" VerticalOptions="Start" HorizontalOptions="Center" Clicked="ClientButton_Clicked" />
-            <Entry Grid.Row="1" x:Name="IPEntry" Placeholder="127.0.0.1" Keyboard="Numeric" MaxLength="15" VerticalOptions="Start" HorizontalOptions="Center" Completed="ClientButton_Clicked"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="1" Text="Join" x:Name="ClientButton" VerticalOptions="Start" HorizontalOptions="Center" Clicked="ClientButton_Clicked" />
+            <Entry Grid.Row="1" Grid.Column="1" HorizontalTextAlignment="Center" x:Name="IPEntry" Placeholder="127.0.0.1" Keyboard="Numeric" MaxLength="15" VerticalOptions="Start" HorizontalOptions="FillAndExpand" Completed="ClientButton_Clicked"/>
         </Grid>
     </Grid>
 </ContentPage>
