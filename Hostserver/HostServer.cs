@@ -48,6 +48,7 @@ namespace Hostserver
                 {
                     PacketSender sender = new PacketSender(args.socket);
                     sender.Send(args.data);
+                    Debug.WriteLine("Transferred");
                 }
             }
         }
