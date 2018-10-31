@@ -30,6 +30,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" x:Name="SliderValue" Text="{Binding Source={x:Reference StrokeWidthSlider}, Path=Value, StringFormat='Stroke Width : {0:F0}'}" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" />
             <Slider Grid.Row="1" Maximum="100" Minimum="1" x:Name="StrokeWidthSlider" MaximumTrackColor="DarkGray"  VerticalOptions="Center" HorizontalOptions="Fill" Value="5" ValueChanged="StrokeWidth_ValueChanged"/>
@@ -49,8 +50,9 @@
             <Button Grid.Row="3" x:Name="PathButton" Text="Path" BackgroundColor="LightGray" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="OptionButton_Clicked"/>
             <Button Grid.Row="4" x:Name="RubberButton" Text="Rubber" BackgroundColor="LightGray"  VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="OptionButton_Clicked"/>
             <Button Grid.Row="5" x:Name="CircleButton" Text="Circle" BackgroundColor="LightGray" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="OptionButton_Clicked"/>
-            <Button Grid.Row="6" x:Name="LineButton" Text="Line" BackgroundColor="LightGray" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="OptionButton_Clicked"/>
-            <Button Grid.Row="7" x:Name="ClearButton" Text="Clear" BackgroundColor="LightGray" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="ClearButton_Clicked"/>
+            <Button Grid.Row="6" x:Name="RectangleButton" Text="Rectangle" BackgroundColor="LightGray" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="OptionButton_Clicked"/>
+            <Button Grid.Row="7" x:Name="LineButton" Text="Line" BackgroundColor="LightGray" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="OptionButton_Clicked"/>
+            <Button Grid.Row="8" x:Name="ClearButton" Text="Clear" BackgroundColor="LightGray" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="ClearButton_Clicked"/>
         </Grid>
         <!--Le canvas permettant de dessiner dessus.-->
         <views:SKCanvasView x:Name="View" Grid.Row="0" Grid.Column="1" PaintSurface="OnPainting" EnableTouchEvents="True" Touch="SKCanvasView_Touch" />
