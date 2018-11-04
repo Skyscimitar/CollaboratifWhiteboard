@@ -42,9 +42,6 @@ namespace Hostserver
                     _receiveSocket.Receive(_buffer, _buffer.Length, SocketFlags.None);
                     //everything is received, now we convert the data:
                     string data = Encoding.Default.GetString(_buffer);
-                    // the following line can be removed after testing
-                    Debug.WriteLine("received from client");
-                    Debug.WriteLine(data);
                     // raise the received package data with appropriate context information
                     PackageReceivedEventArgs eventArgs = new PackageReceivedEventArgs{data = data, id = Id, socket = _receiveSocket};
                     PackageReceivedHandler.OnReceivePackage(this, eventArgs);
