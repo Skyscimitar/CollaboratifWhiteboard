@@ -87,7 +87,6 @@ namespace mainGUI
                 case "CLEAR":
                     forms.Clear();
                     temporaryForms.Clear();
-                    Debug.WriteLine("Clear form from network");
                     break;
             }
 
