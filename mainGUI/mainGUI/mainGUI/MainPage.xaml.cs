@@ -53,44 +53,47 @@ namespace mainGUI
 
         private void UpdateUi(Object o, UpdateUIEventArgs eventArgs)
         {
-            switch (eventArgs.type)
+            lock (forms)
             {
-                case "PATH":
-                    ColoredPath coloredPath = new ColoredPath
-                    {
-                        Path = eventArgs.path,
-                        Color = eventArgs.colour,
-                        StrokeWidth = eventArgs.strokeWidth
-                    };
-                    forms.Add(coloredPath);
-                    break;
-                case "CIRCLE":
-                    ColoredCircle coloredCircle = new ColoredCircle
-                    {
-                        Radius = eventArgs.radius,
-                        StrokeWidth = eventArgs.strokeWidth,
-                        Center = eventArgs.point,
-                        Color = eventArgs.colour
-                    };
-                    forms.Add(coloredCircle);
-                    break;
-                case "LINE":
-                    ColoredLine coloredLine = new ColoredLine
-                    {
-                        Color = eventArgs.colour,
-                        Start = eventArgs.start,
-                        End = eventArgs.end,
-                        StrokeWidth = eventArgs.strokeWidth
-                    };
-                    forms.Add(coloredLine);
-                    break;
-                case "CLEAR":
-                    forms.Clear();
-                    temporaryForms.Clear();
-                    break;
-            }
+                switch (eventArgs.type)
+                {
+                    case "PATH":
+                        ColoredPath coloredPath = new ColoredPath
+                        {
+                            Path = eventArgs.path,
+                            Color = eventArgs.colour,
+                            StrokeWidth = eventArgs.strokeWidth
+                        };
+                        forms.Add(coloredPath);
+                        break;
+                    case "CIRCLE":
+                        ColoredCircle coloredCircle = new ColoredCircle
+                        {
+                            Radius = eventArgs.radius,
+                            StrokeWidth = eventArgs.strokeWidth,
+                            Center = eventArgs.point,
+                            Color = eventArgs.colour
+                        };
+                        forms.Add(coloredCircle);
+                        break;
+                    case "LINE":
+                        ColoredLine coloredLine = new ColoredLine
+                        {
+                            Color = eventArgs.colour,
+                            Start = eventArgs.start,
+                            End = eventArgs.end,
+                            StrokeWidth = eventArgs.strokeWidth
+                        };
+                        forms.Add(coloredLine);
+                        break;
+                    case "CLEAR":
+                        forms.Clear();
+                        temporaryForms.Clear();
+                        break;
+                }
 
-            View.InvalidateSurface();
+                View.InvalidateSurface();
+            }
         }
 
         private void OnPainting(object sender, SKPaintSurfaceEventArgs e) //méthode définissant ce qui s'affiche à l'écran en temps réel
@@ -117,27 +120,30 @@ namespace mainGUI
                 Style = SKPaintStyle.Stroke
             };
 
-            foreach (var touchForm in forms)
+            lock (forms)
             {
-                if (touchForm is ColoredPath touchPath)
+                foreach (var touchForm in forms)
                 {
-                    touchPathStroke.Color = touchPath.Color;
-                    touchPathStroke.StrokeWidth = touchPath.StrokeWidth;
-                    canvas.DrawPath(touchPath.Path, touchPathStroke);
-                }
+                    if (touchForm is ColoredPath touchPath)
+                    {
+                        touchPathStroke.Color = touchPath.Color;
+                        touchPathStroke.StrokeWidth = touchPath.StrokeWidth;
+                        canvas.DrawPath(touchPath.Path, touchPathStroke);
+                    }
 
-                if (touchForm is ColoredCircle touchCircle)
-                {
-                    touchCircleStroke.Color = touchCircle.Color;
-                    touchCircleStroke.StrokeWidth = touchCircle.StrokeWidth;
-                    canvas.DrawCircle(touchCircle.Center, touchCircle.Radius, touchCircleStroke);
-                }
+                    if (touchForm is ColoredCircle touchCircle)
+                    {
+                        touchCircleStroke.Color = touchCircle.Color;
+                        touchCircleStroke.StrokeWidth = touchCircle.StrokeWidth;
+                        canvas.DrawCircle(touchCircle.Center, touchCircle.Radius, touchCircleStroke);
+                    }
 
-                if (touchForm is ColoredLine touchLine)
-                {
-                    touchLineStroke.Color = touchLine.Color;
-                    touchLineStroke.StrokeWidth = touchLine.StrokeWidth;
-                    canvas.DrawLine(touchLine.Start, touchLine.End, touchLineStroke);
+                    if (touchForm is ColoredLine touchLine)
+                    {
+                        touchLineStroke.Color = touchLine.Color;
+                        touchLineStroke.StrokeWidth = touchLine.StrokeWidth;
+                        canvas.DrawLine(touchLine.Start, touchLine.End, touchLineStroke);
+                    }
                 }
             }
 
