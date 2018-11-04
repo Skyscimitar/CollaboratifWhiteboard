@@ -85,6 +85,14 @@ namespace mainGUI
                     };
                     forms.Add(coloredLine);
                     break;
+                case "REQUEST_STATUS":
+                    //triggered when a new client is requesting the current status of the whiteboard
+                    //only called on the host's side
+                    break;
+                case "RESTORE":
+                    //triggered when the client connects to a whiteboard and needs to sync his display with 
+                    //the current status of the whiteboard
+                    break;
             }
 
             View.InvalidateSurface();

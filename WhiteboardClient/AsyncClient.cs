@@ -59,7 +59,7 @@ namespace WhiteboardClient
                 Client = (Socket)ar.AsyncState;
                 Client.EndConnect(ar);
                 Debug.WriteLine("Socket connected to : {0}", Client.RemoteEndPoint);
-
+                //request the current state of the whiteboard from the host
                 connectDone.Set();
             } catch (Exception e)
             {
@@ -131,6 +131,14 @@ namespace WhiteboardClient
                     UiEventArgs = new UpdateUIEventArgs { colour = Colour, start = start, end = end, strokeWidth = strokeWidth, type="LINE"};
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
+                case "REQUEST_STATUS":
+                    //Called for the host, when a new client is requesting the whiteboard's current state
+                    content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
+                    int id = int.Parse(content["id"]);
+                    //the id corresponds to the client's id from the server's perspective
+                    UiEventArgs = new UpdateUIEventArgs { type = "REQUEST_STATUS", client_id = id };
+                    UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
+                    break;
                 default:
                     Console.WriteLine("error parsing received data: {0}", eventArgs.data);
                     break;
@@ -189,6 +197,16 @@ namespace WhiteboardClient
                     new JProperty("colorHash", colourHash),
                     new JProperty("coordinates", coordinates),
                     new JProperty("strokeWidth", strokeWidth))));
+            SendData(json);
+        }
+
+        public void RestoreWhiteboard(List<object> form, int client_id)
+        {
+            //send the current status of the whiteboard to the server
+            //TODO serialize the forms object
+            JObject json = new JObject(new JProperty("type", "RESTORE"),
+                new JProperty("client_id", client_id),
+                new JProperty("content", "form"));
             SendData(json);
         }
     }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Hostserver
 {
@@ -38,11 +40,32 @@ namespace Hostserver
 
         public static void ReceivePackage(Object o, PackageReceivedEventArgs args)
         {
-            foreach(Client c in ClientController.ClientList)
+            Dictionary<string, object> pdict = JsonConvert.DeserializeObject<Dictionary<string, object>>(args.data);
+            if ((string)pdict["type"] == "REQUEST_STATUS")
             {
+                //if the client is requesting the current state of the whiteboard
+                Client c = ClientController.ClientList[0]; //the "host" client
                 PacketSender sender = new PacketSender(c.Socket);
                 sender.Send(args.data);
-                Debug.WriteLine("Transferred");
+            }
+            else if ((string)pdict["type"] == "RESTORE")
+            {
+                //transfer the current state of the whiteboard to the client who
+                //requested it
+                int id = int.Parse((string)pdict["client_id"]);
+                Client c = ClientController.ClientList[id];
+                PacketSender sender = new PacketSender(c.Socket);
+                sender.Send(args.data);
+            }
+            else
+            {
+                //if a new shape is drawn, we simply need to transfer it to the clients
+                foreach (Client c in ClientController.ClientList)
+                {
+                    PacketSender sender = new PacketSender(c.Socket);
+                    sender.Send(args.data);
+                    Debug.WriteLine("Transferred");
+                }
             }
         }
 
