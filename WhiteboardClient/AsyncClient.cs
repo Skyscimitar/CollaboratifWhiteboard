@@ -131,6 +131,10 @@ namespace WhiteboardClient
                     UiEventArgs = new UpdateUIEventArgs { colour = Colour, start = start, end = end, strokeWidth = strokeWidth, type="LINE"};
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
+                case "CLEAR":
+                    UiEventArgs = new UpdateUIEventArgs { type = "CLEAR" };
+                    UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
+                    break;
                 default:
                     Console.WriteLine("error parsing received data: {0}", eventArgs.data);
                     break;
@@ -190,6 +194,15 @@ namespace WhiteboardClient
                     new JProperty("coordinates", coordinates),
                     new JProperty("strokeWidth", strokeWidth))));
             SendData(json);
+        }
+
+        public void Send(string action)
+        {
+            if (action == "CLEAR")
+            {
+                JObject json = new JObject(new JProperty("type", "CLEAR"));
+                SendData(json);
+            }
         }
     }
 }
