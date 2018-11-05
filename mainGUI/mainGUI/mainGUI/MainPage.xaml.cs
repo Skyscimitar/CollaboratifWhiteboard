@@ -26,7 +26,7 @@ namespace mainGUI
         private string option; //variable stockant l'option choisie par l'utilisateur (trait, gomme, cercle, etc.)
         private SKColor _color  = SKColors.Black;
         private float width;
-        private float heigth;
+        private float height;
         public Color color
         {
             get
@@ -48,7 +48,7 @@ namespace mainGUI
             BindingContext = this;
             InitializeComponent();
             width = (float)this.Width;
-            heigth = (float)this.Height;
+            height = (float)this.Height;
             UpdateUIEventHandler.OnUpdateUI += UpdateUi;
             _colorPage = new ColorPage(this);
             asyncClient = new AsyncClient(ip);
@@ -91,7 +91,7 @@ namespace mainGUI
                     break;
                 case "SIZE":
                     width = eventArgs.width;
-                    heigth = eventArgs.height;
+                    height = eventArgs.height;
                     break;
             }
 
@@ -106,7 +106,9 @@ namespace mainGUI
             canvas.Clear(SKColors.White);
             float w = (float)this.Width;
             float h = (float)this.Height;
-            canvas.Scale(w/width, h/heigth);
+            float s = Math.Max(w / width, h / height);
+//            s = Math.Max(s, 1); decommenter si on prefere cacher une partie du contenu pour que toute la zone reste dessinable.
+            canvas.Scale(s);
             var touchPathStroke = new SKPaint
             {
                 IsAntialias = true,
