@@ -103,12 +103,13 @@ namespace mainGUI
         {
             var surface = e.Surface;
             var canvas = surface.Canvas;
-            canvas.Clear(SKColors.White);
             float w = (float)this.Width;
             float h = (float)this.Height;
-            float s = Math.Max(w / width, h / height);
-//            s = Math.Max(s, 1); decommenter si on prefere cacher une partie du contenu pour que toute la zone reste dessinable.
-            canvas.Scale(s);
+            float sx = w / width;
+            float sy = h / height;
+            float s = Math.Min(sx, sy);
+            canvas.Scale(sx, sy);
+            canvas.Clear(SKColors.White);
             var touchPathStroke = new SKPaint
             {
                 IsAntialias = true,
@@ -342,5 +343,6 @@ namespace mainGUI
         {
             strokeWidth = (float)e.NewValue;
         }
+
     }
 }
