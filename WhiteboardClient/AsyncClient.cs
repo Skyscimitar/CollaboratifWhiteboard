@@ -131,6 +131,20 @@ namespace WhiteboardClient
                     UiEventArgs = new UpdateUIEventArgs { colour = Colour, start = start, end = end, strokeWidth = strokeWidth, type="LINE"};
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
+                case "RECTANGLE":
+                    content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
+                    ColourHash = content["colorHash"];
+                    Colour = SKColor.Parse(ColourHash);
+                    strokeWidth = float.Parse(content["strokeWidth"]);
+                    coordinates = content["coordinates"];
+                    x1 = float.Parse(coordinates.Split(' ')[0]);
+                    x2 = float.Parse(coordinates.Split(' ')[1]);
+                    y1 = float.Parse(coordinates.Split(' ')[2]);
+                    y2 = float.Parse(coordinates.Split(' ')[3]);
+                    start = new SKPoint(x1, y1);
+                    end = new SKPoint(x2, y2);
+                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, start = start, end = end, strokeWidth = strokeWidth, type = "RECTANGLE" };
+                    break;
                 case "SIZE":
                     content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
                     float w = float.Parse(content["width"]);
@@ -195,6 +209,23 @@ namespace WhiteboardClient
             float y2 = line.End.Y;
             string coordinates = x1.ToString() + " " + x2.ToString() + " " + y1.ToString() + " " + y2.ToString();
             JObject json = new JObject(new JProperty("type", "LINE"),
+                new JProperty("content", new JObject(
+                    new JProperty("colorHash", colourHash),
+                    new JProperty("coordinates", coordinates),
+                    new JProperty("strokeWidth", strokeWidth))));
+            SendData(json);
+        }
+
+        public void Send(ColoredRectangle rectangle)
+        {
+            string colourHash = rectangle.Color.ToString();
+            float strokeWidth = rectangle.StrokeWidth;
+            float x1 = rectangle.Start.X;
+            float x2 = rectangle.End.X;
+            float y1 = rectangle.Start.Y;
+            float y2 = rectangle.End.Y;
+            string coordinates = x1.ToString() + " " + x2.ToString() + " " + y1.ToString() + " " + y2.ToString();
+            JObject json = new JObject(new JProperty("type", "RECTANGLE"),
                 new JProperty("content", new JObject(
                     new JProperty("colorHash", colourHash),
                     new JProperty("coordinates", coordinates),

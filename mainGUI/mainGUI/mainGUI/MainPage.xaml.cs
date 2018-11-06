@@ -88,6 +88,16 @@ namespace mainGUI
                         };
                         forms.Add(coloredLine);
                         break;
+                    case "RECTANGLE":
+                        ColoredRectangle coloredRectangle = new ColoredRectangle
+                        {
+                            Color = eventArgs.colour,
+                            Start = eventArgs.start,
+                            End = eventArgs.end,
+                            StrokeWidth = eventArgs.strokeWidth
+                        };
+                        forms.Add(coloredRectangle);
+                    break;
                     case "CLEAR":
                         forms.Clear();
                         break;
@@ -96,8 +106,7 @@ namespace mainGUI
                         height = eventArgs.height;
                         break;
                 }
-
-                View.InvalidateSurface();
+            View.InvalidateSurface();
             }
         }
 
@@ -113,8 +122,10 @@ namespace mainGUI
                 height = h;
             float sx = w / width;
             float sy = h / height;
+
+            float s = Math.Min(sx, sy);
             canvas.Clear(SKColors.White);
-            canvas.Scale(sx, sy);
+            //canvas.Scale(sx, sy);
             var touchPathStroke = new SKPaint
             {
                 IsAntialias = true,
@@ -127,8 +138,13 @@ namespace mainGUI
                 Style = SKPaintStyle.Stroke
             };
 
-
             var touchLineStroke = new SKPaint
+            {
+                IsAntialias = true,
+                Style = SKPaintStyle.Stroke
+            };
+
+            var touchRectangleStroke = new SKPaint
             {
                 IsAntialias = true,
                 Style = SKPaintStyle.Stroke
@@ -158,6 +174,20 @@ namespace mainGUI
                         touchLineStroke.StrokeWidth = touchLine.StrokeWidth;
                         canvas.DrawLine(touchLine.Start, touchLine.End, touchLineStroke);
                     }
+
+                    if (touchForm is ColoredRectangle touchRectangle)
+                    {
+                        touchRectangleStroke.Color = touchRectangle.Color;
+                        touchRectangleStroke.StrokeWidth = touchRectangle.StrokeWidth;
+                        SKPoint bottomLeftCorner = touchRectangle.Start;
+                        SKPoint topLeftCorner = new SKPoint(touchRectangle.Start.X, touchRectangle.End.Y);
+                        SKPoint bottomRightCorner = new SKPoint(touchRectangle.End.X, touchRectangle.Start.Y);
+                        SKPoint topRightCorner = touchRectangle.End;
+                        canvas.DrawLine(bottomLeftCorner, topLeftCorner, touchRectangleStroke);
+                        canvas.DrawLine(topLeftCorner, topRightCorner, touchRectangleStroke);
+                        canvas.DrawLine(topRightCorner, bottomRightCorner, touchRectangleStroke);
+                        canvas.DrawLine(bottomRightCorner, bottomLeftCorner, touchRectangleStroke);
+                    }
                 }
             }
 
@@ -183,6 +213,20 @@ namespace mainGUI
                     touchLineStroke.StrokeWidth = touchLine.StrokeWidth;
                     canvas.DrawLine(touchLine.Start, touchLine.End, touchLineStroke);
                 }
+
+                if (touchForm is ColoredRectangle touchRectangle)
+                {
+                    touchRectangleStroke.Color = touchRectangle.Color;
+                    touchRectangleStroke.StrokeWidth = touchRectangle.StrokeWidth;
+                    SKPoint bottomLeftCorner = touchRectangle.Start;
+                    SKPoint topLeftCorner = new SKPoint(touchRectangle.Start.X, touchRectangle.End.Y);
+                    SKPoint bottomRightCorner = new SKPoint(touchRectangle.End.X, touchRectangle.Start.Y);
+                    SKPoint topRightCorner = touchRectangle.End;
+                    canvas.DrawLine(bottomLeftCorner, topLeftCorner, touchRectangleStroke);
+                    canvas.DrawLine(topLeftCorner, topRightCorner, touchRectangleStroke);
+                    canvas.DrawLine(topRightCorner, bottomRightCorner, touchRectangleStroke);
+                    canvas.DrawLine(bottomRightCorner, bottomLeftCorner, touchRectangleStroke);
+                }
             }
         }
 
@@ -197,6 +241,8 @@ namespace mainGUI
                 CircleAction(e, _color);
             else if (option == "line")
                 LineAction(e, _color);
+            else if (option == "rectangle")
+                RectangleAction(e, _color);
 
             e.Handled = true;
             ((SKCanvasView)sender).InvalidateSurface();
@@ -221,6 +267,7 @@ namespace mainGUI
                 PathButton.BackgroundColor = Color.LightGray;
                 RubberButton.BackgroundColor = Color.Gray;
                 CircleButton.BackgroundColor = Color.LightGray;
+                RectangleButton.BackgroundColor = Color.LightGray;
                 LineButton.BackgroundColor = Color.LightGray;
             }
             else if (button.Equals(CircleButton))
@@ -229,6 +276,7 @@ namespace mainGUI
                 PathButton.BackgroundColor = Color.LightGray;
                 RubberButton.BackgroundColor = Color.LightGray;
                 CircleButton.BackgroundColor = Color.Gray;
+                RectangleButton.BackgroundColor = Color.LightGray;
                 LineButton.BackgroundColor = Color.LightGray;
             }
             else if (button.Equals(LineButton))
@@ -237,7 +285,17 @@ namespace mainGUI
                 PathButton.BackgroundColor = Color.LightGray;
                 RubberButton.BackgroundColor = Color.LightGray;
                 CircleButton.BackgroundColor = Color.LightGray;
+                RectangleButton.BackgroundColor = Color.LightGray;
                 LineButton.BackgroundColor = Color.Gray;
+            }
+            else if (button.Equals(RectangleButton))
+            {
+                option = "rectangle";
+                PathButton.BackgroundColor = Color.LightGray;
+                RubberButton.BackgroundColor = Color.LightGray;
+                CircleButton.BackgroundColor = Color.LightGray;
+                RectangleButton.BackgroundColor = Color.Gray;
+                LineButton.BackgroundColor = Color.LightGray;
             }
         }
 
@@ -342,6 +400,36 @@ namespace mainGUI
                     {
                         forms.Add(temporaryForms[e.Id]);
                         asyncClient.Send((ColoredLine)temporaryForms[e.Id]);
+                        temporaryForms.Remove(e.Id);
+                    }
+                    break;
+                case SKTouchAction.Cancelled:
+                    temporaryForms.Remove(e.Id);
+                    break;
+            }
+        }
+
+        private void RectangleAction(SKTouchEventArgs e, SKColor color)
+        {
+            switch (e.ActionType)
+            {
+                case SKTouchAction.Pressed:
+                    var r = new ColoredRectangle { Color = color, Start = e.Location, End = e.Location, StrokeWidth = strokeWidth };
+                    temporaryForms[e.Id] = r;
+                    break;
+                case SKTouchAction.Moved:
+
+                    if (e.InContact && temporaryForms.ContainsKey(e.Id))
+                    {
+                        r = (ColoredRectangle)temporaryForms[e.Id];
+                        r.End = e.Location;
+                    }
+                    break;
+                case SKTouchAction.Released:
+                    if (temporaryForms.ContainsKey(e.Id))
+                    {
+                        forms.Add(temporaryForms[e.Id]);
+                        asyncClient.Send((ColoredRectangle)temporaryForms[e.Id]);
                         temporaryForms.Remove(e.Id);
                     }
                     break;
