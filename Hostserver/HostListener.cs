@@ -3,6 +3,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Diagnostics;
 using System.Threading;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Hostserver
 {
@@ -10,9 +12,13 @@ namespace Hostserver
     {
         public Socket ListenerSocket{get; private set; }
         public short Port = 8080;
+        private float width;
+        private float height;
 
-        public HostListener()
+        public HostListener(double size_x, double size_y)
         {
+            width = (float)size_x;
+            height = (float)size_y;
             ListenerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
 
@@ -26,17 +32,31 @@ namespace Hostserver
 
         private void AcceptNewConnection(IAsyncResult ar)
         {
-         try 
-         {
-             Debug.WriteLine("Server:Accepted Connection on port {0}, protocol: {1}", Port, ProtocolType.Tcp);
-             Socket NewConnectionSocket = ListenerSocket.EndAccept(ar);
-             ClientController.AddClient(NewConnectionSocket);
-             ListenerSocket.BeginAccept(AcceptNewConnection, ListenerSocket);
-         }
-         catch (Exception e)
-         {
-             Debug.WriteLine(e.ToString());
-         } 
+            try 
+            {
+                Debug.WriteLine("Server:Accepted Connection on port {0}, protocol: {1}", Port, ProtocolType.Tcp);
+                Socket NewConnectionSocket = ListenerSocket.EndAccept(ar);
+                ClientController.AddClient(NewConnectionSocket);
+                ListenerSocket.BeginAccept(AcceptNewConnection, ListenerSocket);
+                SendSize();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.ToString());
+            } 
+        }
+
+        private void SendSize()
+        {
+            foreach(Client c in ClientController.ClientList)
+            {
+                PacketSender sender = new PacketSender(c.Socket);
+                JObject json = new JObject(new JProperty("type", "SIZE"),
+                          new JProperty("content", new JObject(
+                              new JProperty("width", width),
+                              new JProperty("height", height))));
+                sender.Send(json.ToString());
+            }
         }
     }
 }

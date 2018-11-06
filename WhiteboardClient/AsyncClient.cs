@@ -144,6 +144,15 @@ namespace WhiteboardClient
                     start = new SKPoint(x1, y1);
                     end = new SKPoint(x2, y2);
                     UiEventArgs = new UpdateUIEventArgs { colour = Colour, start = start, end = end, strokeWidth = strokeWidth, type = "RECTANGLE" };
+                    break;
+                case "SIZE":
+                    content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
+                    float w = float.Parse(content["width"]);
+                    float h = float.Parse(content["height"]);
+                    UiEventArgs = new UpdateUIEventArgs { width = w, height = h, type = "SIZE" };
+                    break;
+                case "CLEAR":
+                    UiEventArgs = new UpdateUIEventArgs { type = "CLEAR" };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 default:
@@ -222,6 +231,15 @@ namespace WhiteboardClient
                     new JProperty("coordinates", coordinates),
                     new JProperty("strokeWidth", strokeWidth))));
             SendData(json);
+        }
+
+        public void Send(string action)
+        {
+            if (action == "CLEAR")
+            {
+                JObject json = new JObject(new JProperty("type", "CLEAR"));
+                SendData(json);
+            }
         }
     }
 }

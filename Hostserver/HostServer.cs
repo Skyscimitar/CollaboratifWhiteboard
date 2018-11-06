@@ -10,9 +10,9 @@ namespace Hostserver
     {
         private HostListener listener;
 
-        public HostServer()
+        public HostServer(double size_x, double size_y)
         {
-            listener = new HostListener();
+            listener = new HostListener(size_x, size_y);
         }
 
 
@@ -40,9 +40,15 @@ namespace Hostserver
         {
             foreach(Client c in ClientController.ClientList)
             {
-                PacketSender sender = new PacketSender(c.Socket);
-                sender.Send(args.data);
-                Debug.WriteLine("Transferred");
+                if (c.Id != args.id)
+                {
+                    PacketSender sender = new PacketSender(c.Socket);
+                    sender.Send(args.data);
+                }
+                else
+                {
+                    continue;
+                }
             }
         }
 
