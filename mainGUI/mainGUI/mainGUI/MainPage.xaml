@@ -53,7 +53,7 @@
             <Button Grid.Row="7" x:Name="ClearButton" Text="Clear" BackgroundColor="LightGray" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="ClearButton_Clicked"/>
         </Grid>
         <!--Le canvas permettant de dessiner dessus.-->
-        <views:SKCanvasView x:Name="View" Grid.Row="0" Grid.Column="1" PaintSurface="OnPainting" EnableTouchEvents="True" Touch="SKCanvasView_Touch" />
+        <views:SKCanvasView x:Name="View" Grid.Row="0" Grid.Column="1" PaintSurface="OnPainting" EnableTouchEvents="True" HorizontalOptions="Fill" VerticalOptions="Fill" Touch="SKCanvasView_Touch"/>
     </Grid>
     
 </ContentPage>

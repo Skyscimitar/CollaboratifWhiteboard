@@ -25,6 +25,8 @@ namespace mainGUI
         private Dictionary<string, List<object>> formsClients = new Dictionary<string, List<object>>();
         private string option; //variable stockant l'option choisie par l'utilisateur (trait, gomme, cercle, etc.)
         private SKColor _color  = SKColors.Black;
+        private float width;
+        private float height;
         public Color color
         {
             get
@@ -45,6 +47,8 @@ namespace mainGUI
         {
             BindingContext = this;
             InitializeComponent();
+            width = (float)this.Width;
+            height = (float)this.Height;
             UpdateUIEventHandler.OnUpdateUI += UpdateUi;
             _colorPage = new ColorPage(this);
             asyncClient = new AsyncClient(ip);
@@ -90,6 +94,10 @@ namespace mainGUI
                         forms.Clear();
                         temporaryForms.Clear();
                         break;
+                    case "SIZE":
+                        width = eventArgs.width;
+                        height = eventArgs.height;
+                        break;
                 }
 
                 View.InvalidateSurface();
@@ -100,6 +108,12 @@ namespace mainGUI
         {
             var surface = e.Surface;
             var canvas = surface.Canvas;
+            float w = (float)this.Width;
+            float h = (float)this.Height;
+            float sx = w / width;
+            float sy = h / height;
+            float s = Math.Min(sx, sy);
+            canvas.Scale(sx, sy);
             canvas.Clear(SKColors.White);
             var touchPathStroke = new SKPaint
             {
@@ -341,5 +355,6 @@ namespace mainGUI
         {
             strokeWidth = (float)e.NewValue;
         }
+
     }
 }

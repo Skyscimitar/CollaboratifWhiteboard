@@ -14,5 +14,7 @@ namespace WhiteboardClient
         public float strokeWidth { get; set; }
         public float radius { get; set; }
         public string type { get; set; }
+        public float width { get; set; }
+        public float height { get; set; }
     }
 }
