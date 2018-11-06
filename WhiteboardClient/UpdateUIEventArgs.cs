@@ -15,5 +15,7 @@ namespace WhiteboardClient
         public float radius { get; set; }
         public string type { get; set; }
         public int client_id { get; set; }
+        public float width { get; set; }
+        public float height { get; set; }
     }
 }

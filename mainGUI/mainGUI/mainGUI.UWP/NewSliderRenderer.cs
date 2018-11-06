@@ -23,7 +23,7 @@ namespace mainGUI.UWP
         {
             base.OnElementChanged(e);
 
-            if (Control == null)
+            if (e.NewElement != null && Control == null)
             {
                 var slider = new FormsSlider
                 {

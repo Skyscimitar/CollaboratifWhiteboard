@@ -24,10 +24,10 @@ namespace mainGUI
 
         private async void ServerButton_Clicked(object sender, EventArgs e)
         {
-            HostServer server = new HostServer();
+            HostServer server = new HostServer(Width,Height);
             Thread sThread = new Thread(server.StartListening);
             sThread.Start();
-            await Navigation.PushAsync(new MainPage("127.0.0.1"));
+            await Navigation.PushAsync(new MainPage(server, "127.0.0.1"));
         }
 
         private async void ClientButton_Clicked(object sender, EventArgs e)

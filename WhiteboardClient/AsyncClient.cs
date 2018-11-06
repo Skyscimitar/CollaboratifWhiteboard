@@ -69,7 +69,6 @@ namespace WhiteboardClient
 
         private void ReceivePackage(Object o, PacketReceivedEventArgs eventArgs)
         {
-            Debug.WriteLine("Received Package");
             Dictionary<string, object> pdict = JsonConvert.DeserializeObject<Dictionary<string, object>>(eventArgs.data);
             Dictionary<string, string> content;
             SKColor Colour;
@@ -103,7 +102,6 @@ namespace WhiteboardClient
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "CIRCLE":
-                    Debug.WriteLine("Here");
                     content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
                     ColourHash = content["colorHash"];
                     Colour = SKColor.Parse(ColourHash);
@@ -137,6 +135,31 @@ namespace WhiteboardClient
                     int id = int.Parse(content["id"]);
                     //the id corresponds to the client's id from the server's perspective
                     UiEventArgs = new UpdateUIEventArgs { type = "REQUEST_STATUS", client_id = id };
+                    break;
+                case "RECTANGLE":
+                    content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
+                    ColourHash = content["colorHash"];
+                    Colour = SKColor.Parse(ColourHash);
+                    strokeWidth = float.Parse(content["strokeWidth"]);
+                    coordinates = content["coordinates"];
+                    x1 = float.Parse(coordinates.Split(' ')[0]);
+                    x2 = float.Parse(coordinates.Split(' ')[1]);
+                    y1 = float.Parse(coordinates.Split(' ')[2]);
+                    y2 = float.Parse(coordinates.Split(' ')[3]);
+                    start = new SKPoint(x1, y1);
+                    end = new SKPoint(x2, y2);
+                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, start = start, end = end, strokeWidth = strokeWidth, type = "RECTANGLE" };
+                    UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
+                    break;
+                case "SIZE":
+                    content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
+                    float w = float.Parse(content["width"]);
+                    float h = float.Parse(content["height"]);
+                    UiEventArgs = new UpdateUIEventArgs { width = w, height = h, type = "SIZE" };
+                    UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
+                    break;
+                case "CLEAR":
+                    UiEventArgs = new UpdateUIEventArgs { type = "CLEAR" };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 default:
@@ -208,6 +231,31 @@ namespace WhiteboardClient
                 new JProperty("client_id", client_id),
                 new JProperty("content", "form"));
             SendData(json);
+        }
+        public void Send(ColoredRectangle rectangle)
+        {
+            string colourHash = rectangle.Color.ToString();
+            float strokeWidth = rectangle.StrokeWidth;
+            float x1 = rectangle.Start.X;
+            float x2 = rectangle.End.X;
+            float y1 = rectangle.Start.Y;
+            float y2 = rectangle.End.Y;
+            string coordinates = x1.ToString() + " " + x2.ToString() + " " + y1.ToString() + " " + y2.ToString();
+            JObject json = new JObject(new JProperty("type", "RECTANGLE"),
+                new JProperty("content", new JObject(
+                    new JProperty("colorHash", colourHash),
+                    new JProperty("coordinates", coordinates),
+                    new JProperty("strokeWidth", strokeWidth))));
+            SendData(json);
+        }
+
+        public void Send(string action)
+        {
+            if (action == "CLEAR")
+            {
+                JObject json = new JObject(new JProperty("type", "CLEAR"));
+                SendData(json);
+            }
         }
     }
 }

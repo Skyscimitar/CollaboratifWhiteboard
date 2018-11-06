@@ -10,11 +10,11 @@ namespace Hostserver
 {
     public class HostServer
     {
-        private HostListener listener;
+        public HostListener listener { get; }
 
-        public HostServer()
+        public HostServer(double size_x, double size_y)
         {
-            listener = new HostListener();
+            listener = new HostListener(size_x, size_y);
         }
 
 
@@ -62,9 +62,15 @@ namespace Hostserver
                 //if a new shape is drawn, we simply need to transfer it to the clients
                 foreach (Client c in ClientController.ClientList)
                 {
-                    PacketSender sender = new PacketSender(c.Socket);
-                    sender.Send(args.data);
-                    Debug.WriteLine("Transferred");
+                    if (c.Id != args.id)
+                    {
+                        PacketSender sender = new PacketSender(c.Socket);
+                        sender.Send(args.data);
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
             }
         }

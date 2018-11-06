@@ -13,6 +13,8 @@ using WhiteboardClient;
 using System.Net.Sockets;
 using System.Diagnostics;
 using ColoredForms;
+using System.Net;
+using Hostserver;
 
 namespace mainGUI
 {
@@ -25,6 +27,11 @@ namespace mainGUI
         private Dictionary<string, List<object>> formsClients = new Dictionary<string, List<object>>();
         private string option; //variable stockant l'option choisie par l'utilisateur (trait, gomme, cercle, etc.)
         private SKColor _color  = SKColors.Black;
+        private float width;
+        private float height;
+        public string IpAddress { get; }
+        private readonly HostServer hostServer;
+
         public Color color
         {
             get
@@ -41,9 +48,25 @@ namespace mainGUI
         private readonly ColorPage _colorPage;
         private AsyncClient asyncClient;
 
+
+        public MainPage(HostServer server, string ip)
+
+        {
+            hostServer = server;
+            BindingContext = this;
+            IpAddress = new WebClient().DownloadString("http://icanhazip.com");
+            IpAddress = String.Format("Whiteboard IP: {0}", IpAddress);
+            InitializeComponent();
+            UpdateUIEventHandler.OnUpdateUI += UpdateUi;
+            _colorPage = new ColorPage(this);
+            asyncClient = new AsyncClient(ip);
+            asyncClient.StartClient();
+        }
+
         public MainPage(string ip)
         {
             BindingContext = this;
+            IpAddress = String.Format("Whiteboard IP: {0}", ip);
             InitializeComponent();
             UpdateUIEventHandler.OnUpdateUI += UpdateUi;
             _colorPage = new ColorPage(this);
@@ -53,8 +76,9 @@ namespace mainGUI
 
         private void UpdateUi(Object o, UpdateUIEventArgs eventArgs)
         {
-            switch (eventArgs.type)
+            lock (forms)
             {
+<<<<<<< HEAD
                 case "PATH":
                     ColoredPath coloredPath = new ColoredPath
                     {
@@ -95,15 +119,77 @@ namespace mainGUI
                     break;
             }
 
+=======
+                switch (eventArgs.type)
+                {
+                    case "PATH":
+                        ColoredPath coloredPath = new ColoredPath
+                        {
+                            Path = eventArgs.path,
+                            Color = eventArgs.colour,
+                            StrokeWidth = eventArgs.strokeWidth
+                        };
+                        forms.Add(coloredPath);
+                        break;
+                    case "CIRCLE":
+                        ColoredCircle coloredCircle = new ColoredCircle
+                        {
+                            Radius = eventArgs.radius,
+                            StrokeWidth = eventArgs.strokeWidth,
+                            Center = eventArgs.point,
+                            Color = eventArgs.colour
+                        };
+                        forms.Add(coloredCircle);
+                        break;
+                    case "LINE":
+                        ColoredLine coloredLine = new ColoredLine
+                        {
+                            Color = eventArgs.colour,
+                            Start = eventArgs.start,
+                            End = eventArgs.end,
+                            StrokeWidth = eventArgs.strokeWidth
+                        };
+                        forms.Add(coloredLine);
+                        break;
+                    case "RECTANGLE":
+                        ColoredRectangle coloredRectangle = new ColoredRectangle
+                        {
+                            Color = eventArgs.colour,
+                            Start = eventArgs.start,
+                            End = eventArgs.end,
+                            StrokeWidth = eventArgs.strokeWidth
+                        };
+                        forms.Add(coloredRectangle);
+                        break;
+                    case "CLEAR":
+                        forms.Clear();
+                        break;
+                    case "SIZE":
+                        width = eventArgs.width;
+                        height = eventArgs.height;
+                        break;
+                }
+>>>>>>> master
             View.InvalidateSurface();
-            Debug.WriteLine("event triggered and handled");
+            }
         }
 
         private void OnPainting(object sender, SKPaintSurfaceEventArgs e) //méthode définissant ce qui s'affiche à l'écran en temps réel
         {
             var surface = e.Surface;
             var canvas = surface.Canvas;
+            float w = (float)Width;
+            float h = (float)Height;
+            if (width == 0)
+                width = w;
+            if (height == 0)
+                height = h;
+            float sx = w / width;
+            float sy = h / height;
+
+            float s = Math.Min(sx, sy);
             canvas.Clear(SKColors.White);
+            canvas.Scale(sx, sy);
             var touchPathStroke = new SKPaint
             {
                 IsAntialias = true,
@@ -116,35 +202,56 @@ namespace mainGUI
                 Style = SKPaintStyle.Stroke
             };
 
-
             var touchLineStroke = new SKPaint
             {
                 IsAntialias = true,
                 Style = SKPaintStyle.Stroke
             };
 
-            Thread.Sleep(3);
-            foreach (var touchForm in forms)
+            var touchRectangleStroke = new SKPaint
             {
-                if (touchForm is ColoredPath touchPath)
-                {
-                    touchPathStroke.Color = touchPath.Color;
-                    touchPathStroke.StrokeWidth = touchPath.StrokeWidth;
-                    canvas.DrawPath(touchPath.Path, touchPathStroke);
-                }
+                IsAntialias = true,
+                Style = SKPaintStyle.Stroke
+            };
 
-                if (touchForm is ColoredCircle touchCircle)
+            lock (forms)
+            {
+                foreach (var touchForm in forms)
                 {
-                    touchCircleStroke.Color = touchCircle.Color;
-                    touchCircleStroke.StrokeWidth = touchCircle.StrokeWidth;
-                    canvas.DrawCircle(touchCircle.Center, touchCircle.Radius, touchCircleStroke);
-                }
+                    if (touchForm is ColoredPath touchPath)
+                    {
+                        touchPathStroke.Color = touchPath.Color;
+                        touchPathStroke.StrokeWidth = touchPath.StrokeWidth;
+                        canvas.DrawPath(touchPath.Path, touchPathStroke);
+                    }
 
-                if (touchForm is ColoredLine touchLine)
-                {
-                    touchLineStroke.Color = touchLine.Color;
-                    touchLineStroke.StrokeWidth = touchLine.StrokeWidth;
-                    canvas.DrawLine(touchLine.Start, touchLine.End, touchLineStroke);
+                    if (touchForm is ColoredCircle touchCircle)
+                    {
+                        touchCircleStroke.Color = touchCircle.Color;
+                        touchCircleStroke.StrokeWidth = touchCircle.StrokeWidth;
+                        canvas.DrawCircle(touchCircle.Center, touchCircle.Radius, touchCircleStroke);
+                    }
+
+                    if (touchForm is ColoredLine touchLine)
+                    {
+                        touchLineStroke.Color = touchLine.Color;
+                        touchLineStroke.StrokeWidth = touchLine.StrokeWidth;
+                        canvas.DrawLine(touchLine.Start, touchLine.End, touchLineStroke);
+                    }
+
+                    if (touchForm is ColoredRectangle touchRectangle)
+                    {
+                        touchRectangleStroke.Color = touchRectangle.Color;
+                        touchRectangleStroke.StrokeWidth = touchRectangle.StrokeWidth;
+                        SKPoint bottomLeftCorner = touchRectangle.Start;
+                        SKPoint topLeftCorner = new SKPoint(touchRectangle.Start.X, touchRectangle.End.Y);
+                        SKPoint bottomRightCorner = new SKPoint(touchRectangle.End.X, touchRectangle.Start.Y);
+                        SKPoint topRightCorner = touchRectangle.End;
+                        canvas.DrawLine(bottomLeftCorner, topLeftCorner, touchRectangleStroke);
+                        canvas.DrawLine(topLeftCorner, topRightCorner, touchRectangleStroke);
+                        canvas.DrawLine(topRightCorner, bottomRightCorner, touchRectangleStroke);
+                        canvas.DrawLine(bottomRightCorner, bottomLeftCorner, touchRectangleStroke);
+                    }
                 }
             }
 
@@ -170,6 +277,20 @@ namespace mainGUI
                     touchLineStroke.StrokeWidth = touchLine.StrokeWidth;
                     canvas.DrawLine(touchLine.Start, touchLine.End, touchLineStroke);
                 }
+
+                if (touchForm is ColoredRectangle touchRectangle)
+                {
+                    touchRectangleStroke.Color = touchRectangle.Color;
+                    touchRectangleStroke.StrokeWidth = touchRectangle.StrokeWidth;
+                    SKPoint bottomLeftCorner = touchRectangle.Start;
+                    SKPoint topLeftCorner = new SKPoint(touchRectangle.Start.X, touchRectangle.End.Y);
+                    SKPoint bottomRightCorner = new SKPoint(touchRectangle.End.X, touchRectangle.Start.Y);
+                    SKPoint topRightCorner = touchRectangle.End;
+                    canvas.DrawLine(bottomLeftCorner, topLeftCorner, touchRectangleStroke);
+                    canvas.DrawLine(topLeftCorner, topRightCorner, touchRectangleStroke);
+                    canvas.DrawLine(topRightCorner, bottomRightCorner, touchRectangleStroke);
+                    canvas.DrawLine(bottomRightCorner, bottomLeftCorner, touchRectangleStroke);
+                }
             }
         }
 
@@ -184,6 +305,8 @@ namespace mainGUI
                 CircleAction(e, _color);
             else if (option == "line")
                 LineAction(e, _color);
+            else if (option == "rectangle")
+                RectangleAction(e, _color);
 
             e.Handled = true;
             ((SKCanvasView)sender).InvalidateSurface();
@@ -208,6 +331,7 @@ namespace mainGUI
                 PathButton.BackgroundColor = Color.LightGray;
                 RubberButton.BackgroundColor = Color.Gray;
                 CircleButton.BackgroundColor = Color.LightGray;
+                RectangleButton.BackgroundColor = Color.LightGray;
                 LineButton.BackgroundColor = Color.LightGray;
             }
             else if (button.Equals(CircleButton))
@@ -216,6 +340,7 @@ namespace mainGUI
                 PathButton.BackgroundColor = Color.LightGray;
                 RubberButton.BackgroundColor = Color.LightGray;
                 CircleButton.BackgroundColor = Color.Gray;
+                RectangleButton.BackgroundColor = Color.LightGray;
                 LineButton.BackgroundColor = Color.LightGray;
             }
             else if (button.Equals(LineButton))
@@ -224,18 +349,33 @@ namespace mainGUI
                 PathButton.BackgroundColor = Color.LightGray;
                 RubberButton.BackgroundColor = Color.LightGray;
                 CircleButton.BackgroundColor = Color.LightGray;
+                RectangleButton.BackgroundColor = Color.LightGray;
                 LineButton.BackgroundColor = Color.Gray;
+            }
+            else if (button.Equals(RectangleButton))
+            {
+                option = "rectangle";
+                PathButton.BackgroundColor = Color.LightGray;
+                RubberButton.BackgroundColor = Color.LightGray;
+                CircleButton.BackgroundColor = Color.LightGray;
+                RectangleButton.BackgroundColor = Color.Gray;
+                LineButton.BackgroundColor = Color.LightGray;
             }
         }
 
 
         //Ce bouton vide la zône de dessin, sera potentiellement à réserver à l'hôte.
-        private void ClearButton_Clicked(object sender, EventArgs e)
+        private async void ClearButton_Clicked(object sender, EventArgs e)
         {
             var view = (SKCanvasView) this.FindByName("View");
-            forms.Clear();
-            temporaryForms.Clear();
-            view.InvalidateSurface();
+            bool answer = await DisplayAlert ("WARNING", "This will clear the canvas for all users, are you sure you want to continue?", "Yes", "No");
+            if (answer)
+            {
+                asyncClient.Send("CLEAR");
+                forms.Clear();
+                temporaryForms.Clear();
+                view.InvalidateSurface();
+            }
         }
 
         private async void ColorButton_Clicked(object sender, EventArgs e)
@@ -280,7 +420,7 @@ namespace mainGUI
             {
                 case SKTouchAction.Pressed:
                     var c = new ColoredCircle { Color = color, Center = e.Location, Radius = 0.1F, StrokeWidth=strokeWidth };
-                    temporaryForms[e.Id] = c;
+                    temporaryForms[e.Id] = c; 
                     break;
                 case SKTouchAction.Moved:
                     if (e.InContact && temporaryForms.ContainsKey(e.Id))
@@ -333,9 +473,46 @@ namespace mainGUI
             }
         }
 
+        private void RectangleAction(SKTouchEventArgs e, SKColor color)
+        {
+            switch (e.ActionType)
+            {
+                case SKTouchAction.Pressed:
+                    var r = new ColoredRectangle { Color = color, Start = e.Location, End = e.Location, StrokeWidth = strokeWidth };
+                    temporaryForms[e.Id] = r;
+                    break;
+                case SKTouchAction.Moved:
+
+                    if (e.InContact && temporaryForms.ContainsKey(e.Id))
+                    {
+                        r = (ColoredRectangle)temporaryForms[e.Id];
+                        r.End = e.Location;
+                    }
+                    break;
+                case SKTouchAction.Released:
+                    if (temporaryForms.ContainsKey(e.Id))
+                    {
+                        forms.Add(temporaryForms[e.Id]);
+                        asyncClient.Send((ColoredRectangle)temporaryForms[e.Id]);
+                        temporaryForms.Remove(e.Id);
+                    }
+                    break;
+                case SKTouchAction.Cancelled:
+                    temporaryForms.Remove(e.Id);
+                    break;
+            }
+        }
+
         private void StrokeWidth_ValueChanged(object sender, ValueChangedEventArgs e)
         {
             strokeWidth = (float)e.NewValue;
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            if (hostServer != null)
+                hostServer.listener.ListenerSocket.Close();
+            return base.OnBackButtonPressed();
         }
     }
 }
