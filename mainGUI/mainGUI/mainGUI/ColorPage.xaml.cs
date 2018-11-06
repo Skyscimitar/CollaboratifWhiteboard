@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using Rg.Plugins.Popup.Extensions;
 using Rg.Plugins.Popup.Pages;
-using SkiaSharp;
-using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -27,8 +24,7 @@ namespace mainGUI
         private void ColorButton_Clicked(object sender, EventArgs e)
         {
             Button button = (Button)sender;
-            Color color = button.BackgroundColor;
-            page.color = color;
+            page.color = button.BackgroundColor;
         }
     }
 }
