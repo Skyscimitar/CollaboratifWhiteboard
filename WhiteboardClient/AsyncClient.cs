@@ -166,48 +166,19 @@ namespace WhiteboardClient
         
         public void Send(ColoredCircle circle)
         {
-            string colourHash = circle.Color.ToString();
-            float x = circle.Center.X;
-            float y = circle.Center.Y;
-            string coordinates = x.ToString() + " " + y.ToString();
-            float strokeWidth = circle.StrokeWidth;
-            float radius = circle.Radius;
-            JObject json = new JObject(new JProperty("type", "CIRCLE"),
-                                      new JProperty("content", new JObject(
-                                          new JProperty("colorHash", colourHash),
-                                          new JProperty("coordinates", coordinates),
-                                           new JProperty("radius", radius),
-                                           new JProperty("strokeWidth", strokeWidth))));
+            JObject json = Jsonify(circle);
             SendData(json);
         }
 
         public void Send(ColoredPath path)
         {
-            string colourHash = path.Color.ToString();
-            string SVGPath = path.Path.ToSvgPathData();
-            float strokeWidth = path.StrokeWidth;
-            JObject json = new JObject(new JProperty("type", "PATH"),
-                                       new JProperty("content", new JObject(
-                                          new JProperty("svgpath", SVGPath),
-                                          new JProperty("colorHash", colourHash),
-                                          new JProperty("strokeWidth", strokeWidth))));
+            JObject json = Jsonify(path);
             SendData(json);
         }
 
         public void Send(ColoredLine line)
         {
-            string colourHash = line.Color.ToString();
-            float strokeWidth = line.StrokeWidth;
-            float x1 = line.Start.X;
-            float x2 = line.End.X;
-            float y1 = line.Start.Y;
-            float y2 = line.End.Y;
-            string coordinates = x1.ToString() + " " + x2.ToString() + " " + y1.ToString() + " " + y2.ToString();
-            JObject json = new JObject(new JProperty("type", "LINE"),
-                new JProperty("content", new JObject(
-                    new JProperty("colorHash", colourHash),
-                    new JProperty("coordinates", coordinates),
-                    new JProperty("strokeWidth", strokeWidth))));
+            JObject json = Jsonify(line);
             SendData(json);
         }
 
@@ -217,10 +188,62 @@ namespace WhiteboardClient
             //TODO serialize the forms object
             JObject json = new JObject(new JProperty("type", "RESTORE"),
                 new JProperty("client_id", client_id),
-                new JProperty("content", "form"));
+                new JProperty("content", JsonifyFormList(form)));
             SendData(json);
         }
+
         public void Send(ColoredRectangle rectangle)
+        {
+            JObject json = Jsonify(rectangle);
+            SendData(json);
+        }
+
+        public void Send(string action)
+        {
+            if (action == "CLEAR")
+            {
+                JObject json = new JObject(new JProperty("type", "CLEAR"));
+                SendData(json);
+            }
+        }
+
+        private JArray JsonifyFormList(List<object> form)
+        {
+            JArray jArray = new JArray();
+            JObject jObject;
+            foreach (object o in form)
+            {
+                var colouredForm = o as ColoredForm;
+                if (o == null)
+                {
+                    throw new ArgumentException();
+                }
+                if (colouredForm as ColoredLine != null)
+                {
+                    jObject = Jsonify(colouredForm as ColoredLine);
+                    jArray.Add(jObject);
+                }
+                else if (colouredForm as ColoredPath != null)
+                {
+                    jObject = Jsonify(colouredForm as ColoredPath);
+                    jArray.Add(jObject);
+                }
+                else if (colouredForm as ColoredCircle != null)
+                {
+                    jObject = Jsonify(colouredForm as ColoredCircle);
+                    jArray.Add(jObject);
+                }
+                else if (colouredForm as ColoredRectangle != null)
+                {
+                    jObject = Jsonify(colouredForm as ColoredRectangle);
+                    jArray.Add(jObject);
+                }
+            }
+            return jArray;
+        }
+
+
+        private JObject Jsonify(ColoredRectangle rectangle)
         {
             string colourHash = rectangle.Color.ToString();
             float strokeWidth = rectangle.StrokeWidth;
@@ -234,16 +257,54 @@ namespace WhiteboardClient
                     new JProperty("colorHash", colourHash),
                     new JProperty("coordinates", coordinates),
                     new JProperty("strokeWidth", strokeWidth))));
-            SendData(json);
+            return json;
         }
 
-        public void Send(string action)
+        private JObject Jsonify(ColoredCircle circle)
         {
-            if (action == "CLEAR")
-            {
-                JObject json = new JObject(new JProperty("type", "CLEAR"));
-                SendData(json);
-            }
+            string colourHash = circle.Color.ToString();
+            float x = circle.Center.X;
+            float y = circle.Center.Y;
+            string coordinates = x.ToString() + " " + y.ToString();
+            float strokeWidth = circle.StrokeWidth;
+            float radius = circle.Radius;
+            JObject json = new JObject(new JProperty("type", "CIRCLE"),
+                                      new JProperty("content", new JObject(
+                                          new JProperty("colorHash", colourHash),
+                                          new JProperty("coordinates", coordinates),
+                                           new JProperty("radius", radius),
+                                           new JProperty("strokeWidth", strokeWidth))));
+            return json;
+        }
+
+        private JObject Jsonify(ColoredPath path)
+        {
+            string colourHash = path.Color.ToString();
+            string SVGPath = path.Path.ToSvgPathData();
+            float strokeWidth = path.StrokeWidth;
+            JObject json = new JObject(new JProperty("type", "PATH"),
+                                       new JProperty("content", new JObject(
+                                          new JProperty("svgpath", SVGPath),
+                                          new JProperty("colorHash", colourHash),
+                                          new JProperty("strokeWidth", strokeWidth))));
+            return json;
+        }
+
+        private JObject Jsonify(ColoredLine line)
+        {
+            string colourHash = line.Color.ToString();
+            float strokeWidth = line.StrokeWidth;
+            float x1 = line.Start.X;
+            float x2 = line.End.X;
+            float y1 = line.Start.Y;
+            float y2 = line.End.Y;
+            string coordinates = x1.ToString() + " " + x2.ToString() + " " + y1.ToString() + " " + y2.ToString();
+            JObject json = new JObject(new JProperty("type", "LINE"),
+                new JProperty("content", new JObject(
+                    new JProperty("colorHash", colourHash),
+                    new JProperty("coordinates", coordinates),
+                    new JProperty("strokeWidth", strokeWidth))));
+            return json;
         }
     }
 }
