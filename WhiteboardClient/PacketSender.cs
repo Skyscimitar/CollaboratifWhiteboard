@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
-using System.Diagnostics;
 namespace WhiteboardClient
 {
     public class PacketSender
     {
-        private Socket _sendSocket;
+        private readonly Socket _sendSocket;
 
         public PacketSender(Socket socket)
         {
