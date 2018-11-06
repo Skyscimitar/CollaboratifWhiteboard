@@ -1,18 +1,15 @@
 using System;
 using System.Text;
-using System.Collections.Generic;
-using System.IO;
 using System.Net.Sockets;
-using System.Net;
-using System.Diagnostics;
 
 namespace Hostserver
 {
     public class PacketReceiver
     {
         private byte[] _buffer;
-        private Socket _receiveSocket;
-        private int Id {get; set;}
+        private readonly Socket _receiveSocket;
+        private readonly int Id;
+
         public PacketReceiver(Socket socket, int Id)
         {
             _receiveSocket = socket;
@@ -43,7 +40,7 @@ namespace Hostserver
                     //everything is received, now we convert the data:
                     string data = Encoding.Default.GetString(_buffer);
                     // raise the received package data with appropriate context information
-                    PackageReceivedEventArgs eventArgs = new PackageReceivedEventArgs{data = data, id = Id, socket = _receiveSocket};
+                    PackageReceivedEventArgs eventArgs = new PackageReceivedEventArgs{Data = data, Id = Id, Socket = _receiveSocket};
                     PackageReceivedHandler.OnReceivePackage(this, eventArgs);
                 }
                 else

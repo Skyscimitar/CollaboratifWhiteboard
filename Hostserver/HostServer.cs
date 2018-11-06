@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net;
 using System.Net.Sockets;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -10,24 +8,24 @@ namespace Hostserver
 {
     public class HostServer
     {
-        public HostListener listener { get; }
+        public HostListener Listener { get; }
 
         public HostServer(double size_x, double size_y)
         {
-            listener = new HostListener(size_x, size_y);
+            Listener = new HostListener(size_x, size_y);
         }
 
 
         public void StartListening()
         {
-            listener.StartNewWhiteboardListener();
+            Listener.StartNewWhiteboardListener();
             PackageReceivedHandler.OnReceivePackage += ReceivePackage;
             while (true)
             {
             }
         }
 
-        public List<Client> getClientList()
+        public List<Client> GetClientList()
         {
             return ClientController.ClientList;
         }
@@ -40,13 +38,13 @@ namespace Hostserver
 
         public static void ReceivePackage(Object o, PackageReceivedEventArgs args)
         {
-            Dictionary<string, object> pdict = JsonConvert.DeserializeObject<Dictionary<string, object>>(args.data);
+            Dictionary<string, object> pdict = JsonConvert.DeserializeObject<Dictionary<string, object>>(args.Data);
             if ((string)pdict["type"] == "REQUEST_STATUS")
             {
                 //if the client is requesting the current state of the whiteboard
                 Client c = ClientController.ClientList[0]; //the "host" client
                 PacketSender sender = new PacketSender(c.Socket);
-                sender.Send(args.data);
+                sender.Send(args.Data);
             }
             else if ((string)pdict["type"] == "RESTORE")
             {
@@ -55,17 +53,17 @@ namespace Hostserver
                 int id = int.Parse(pdict["client_id"].ToString());
                 Client c = ClientController.ClientList[id];
                 PacketSender sender = new PacketSender(c.Socket);
-                sender.Send(args.data);
+                sender.Send(args.Data);
             }
             else
             {
                 //if a new shape is drawn, we simply need to transfer it to the clients
                 foreach (Client c in ClientController.ClientList)
                 {
-                    if (c.Id != args.id)
+                    if (c.Id != args.Id)
                     {
                         PacketSender sender = new PacketSender(c.Socket);
-                        sender.Send(args.data);
+                        sender.Send(args.Data);
                     }
                     else
                     {

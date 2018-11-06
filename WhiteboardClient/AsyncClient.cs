@@ -110,7 +110,7 @@ namespace WhiteboardClient
                     content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
                     float w = float.Parse(content["width"]);
                     float h = float.Parse(content["height"]);
-                    UiEventArgs = new UpdateUIEventArgs { width = w, height = h, Type = "SIZE" };
+                    UiEventArgs = new UpdateUIEventArgs { Width = w, Height = h, Type = "SIZE" };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "CLEAR":

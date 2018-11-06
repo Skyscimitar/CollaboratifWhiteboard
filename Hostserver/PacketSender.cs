@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-using System.Net;
 using System.Collections.Generic;
 using System.Net.Sockets;
 
@@ -8,7 +7,7 @@ namespace Hostserver
 {
     public class PacketSender
     {
-        private Socket _sendSocket;
+        private readonly Socket _sendSocket;
 
         public PacketSender(Socket socket)
         {

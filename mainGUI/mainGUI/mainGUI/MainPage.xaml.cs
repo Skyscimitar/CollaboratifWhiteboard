@@ -86,8 +86,8 @@ namespace mainGUI
                         forms.Clear();
                         break;
                     case "SIZE":
-                        width = eventArgs.width;
-                        height = eventArgs.height;
+                        width = eventArgs.Width;
+                        height = eventArgs.Height;
                         break;
                     case "REQUEST_STATUS":
                         asyncClient.RestoreWhiteboard(this.forms, eventArgs.client_id);
@@ -391,7 +391,7 @@ namespace mainGUI
         protected override bool OnBackButtonPressed()
         {
             if (hostServer != null)
-                hostServer.listener.ListenerSocket.Close();
+                hostServer.Listener.ListenerSocket.Close();
             return base.OnBackButtonPressed();
         }
     }
