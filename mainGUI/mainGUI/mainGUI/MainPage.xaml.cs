@@ -13,6 +13,7 @@ using WhiteboardClient;
 using System.Net.Sockets;
 using System.Diagnostics;
 using ColoredForms;
+using Hostserver;
 
 namespace mainGUI
 {
@@ -27,6 +28,7 @@ namespace mainGUI
         private SKColor _color  = SKColors.Black;
         private float width;
         private float height;
+        private readonly HostServer hostServer;
         public Color color
         {
             get
@@ -42,6 +44,17 @@ namespace mainGUI
         private float strokeWidth = 5;
         private readonly ColorPage _colorPage;
         private AsyncClient asyncClient;
+
+        public MainPage(HostServer server, string ip)
+        {
+            hostServer = server;
+            BindingContext = this;
+            InitializeComponent();
+            UpdateUIEventHandler.OnUpdateUI += UpdateUi;
+            _colorPage = new ColorPage(this);
+            asyncClient = new AsyncClient(ip);
+            asyncClient.StartClient();
+        }
 
         public MainPage(string ip)
         {
@@ -444,5 +457,11 @@ namespace mainGUI
             strokeWidth = (float)e.NewValue;
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            if (hostServer != null)
+                hostServer.listener.ListenerSocket.Close();
+            return base.OnBackButtonPressed();
+        }
     }
 }
