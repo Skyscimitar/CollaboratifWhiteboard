@@ -59,7 +59,6 @@ namespace WhiteboardClient
                 Client = (Socket)ar.AsyncState;
                 Client.EndConnect(ar);
                 Debug.WriteLine("Socket connected to : {0}", Client.RemoteEndPoint);
-
                 connectDone.Set();
             } catch (Exception e)
             {
@@ -69,7 +68,6 @@ namespace WhiteboardClient
 
         private void ReceivePackage(Object o, PacketReceivedEventArgs eventArgs)
         {
-            Debug.WriteLine("Received Package");
             Dictionary<string, object> pdict = JsonConvert.DeserializeObject<Dictionary<string, object>>(eventArgs.data);
             Dictionary<string, string> content;
             SKColor Colour;
@@ -103,7 +101,6 @@ namespace WhiteboardClient
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "CIRCLE":
-                    Debug.WriteLine("Here");
                     content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
                     ColourHash = content["colorHash"];
                     Colour = SKColor.Parse(ColourHash);
@@ -144,12 +141,14 @@ namespace WhiteboardClient
                     start = new SKPoint(x1, y1);
                     end = new SKPoint(x2, y2);
                     UiEventArgs = new UpdateUIEventArgs { colour = Colour, start = start, end = end, strokeWidth = strokeWidth, type = "RECTANGLE" };
+                    UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "SIZE":
                     content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
                     float w = float.Parse(content["width"]);
                     float h = float.Parse(content["height"]);
                     UiEventArgs = new UpdateUIEventArgs { width = w, height = h, type = "SIZE" };
+                    UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "CLEAR":
                     UiEventArgs = new UpdateUIEventArgs { type = "CLEAR" };

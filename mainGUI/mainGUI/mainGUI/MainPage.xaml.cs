@@ -118,7 +118,7 @@ namespace mainGUI
                             StrokeWidth = eventArgs.strokeWidth
                         };
                         forms.Add(coloredRectangle);
-                    break;
+                        break;
                     case "CLEAR":
                         forms.Clear();
                         break;
