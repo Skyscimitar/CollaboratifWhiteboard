@@ -12,8 +12,8 @@ namespace Hostserver
     {
         public Socket ListenerSocket{get; private set; }
         public short Port = 8080;
-        private float width;
-        private float height;
+        private readonly float width;
+        private readonly float height;
 
         public HostListener(double size_x, double size_y)
         {
@@ -38,7 +38,7 @@ namespace Hostserver
                 Socket NewConnectionSocket = ListenerSocket.EndAccept(ar);
                 ClientController.AddClient(NewConnectionSocket);
                 ListenerSocket.BeginAccept(AcceptNewConnection, ListenerSocket);
-                SendSize();
+                SendSize(NewConnectionSocket);
             }
             catch (Exception e)
             {
@@ -46,17 +46,14 @@ namespace Hostserver
             } 
         }
 
-        private void SendSize()
+        private void SendSize(Socket socket)
         {
-            foreach(Client c in ClientController.ClientList)
-            {
-                PacketSender sender = new PacketSender(c.Socket);
-                JObject json = new JObject(new JProperty("type", "SIZE"),
-                          new JProperty("content", new JObject(
-                              new JProperty("width", width),
-                              new JProperty("height", height))));
-                sender.Send(json.ToString());
-            }
+            PacketSender sender = new PacketSender(socket);
+            JObject json = new JObject(new JProperty("type", "SIZE"),
+                      new JProperty("content", new JObject(
+                          new JProperty("width", width),
+                          new JProperty("height", height))));
+            sender.Send(json.ToString());
         }
     }
 }
