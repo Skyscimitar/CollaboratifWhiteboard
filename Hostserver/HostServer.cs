@@ -8,7 +8,7 @@ namespace Hostserver
 {
     public class HostServer
     {
-        private HostListener listener;
+        public HostListener listener { get; }
 
         public HostServer(double size_x, double size_y)
         {

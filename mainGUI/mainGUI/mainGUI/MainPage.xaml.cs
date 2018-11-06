@@ -14,6 +14,7 @@ using System.Net.Sockets;
 using System.Diagnostics;
 using ColoredForms;
 using System.Net;
+using Hostserver;
 
 namespace mainGUI
 {
@@ -29,6 +30,8 @@ namespace mainGUI
         private float width;
         private float height;
         public string IpAddress { get; }
+        private readonly HostServer hostServer;
+
         public Color color
         {
             get
@@ -45,19 +48,25 @@ namespace mainGUI
         private readonly ColorPage _colorPage;
         private AsyncClient asyncClient;
 
-        public MainPage(string ip, bool host)
+
+        public MainPage(HostServer server, string ip)
+
+        {
+            hostServer = server;
+            BindingContext = this;
+            IpAddress = new WebClient().DownloadString("http://icanhazip.com");
+            IpAddress = String.Format("Whiteboard IP: {0}", IpAddress);
+            InitializeComponent();
+            UpdateUIEventHandler.OnUpdateUI += UpdateUi;
+            _colorPage = new ColorPage(this);
+            asyncClient = new AsyncClient(ip);
+            asyncClient.StartClient();
+        }
+
+        public MainPage(string ip)
         {
             BindingContext = this;
-            if (host)
-            {
-                IpAddress = new WebClient().DownloadString("http://icanhazip.com");
-                IpAddress = String.Format("Whiteboard IP: {0}", IpAddress);
-                Debug.WriteLine(IpAddress);
-            }
-            else
-            {
-                IpAddress = String.Format("Whiteboard IP: {0}",ip);
-            }
+            IpAddress = String.Format("Whiteboard IP: {0}", ip);
             InitializeComponent();
             UpdateUIEventHandler.OnUpdateUI += UpdateUi;
             _colorPage = new ColorPage(this);
@@ -456,5 +465,11 @@ namespace mainGUI
             strokeWidth = (float)e.NewValue;
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            if (hostServer != null)
+                hostServer.listener.ListenerSocket.Close();
+            return base.OnBackButtonPressed();
+        }
     }
 }

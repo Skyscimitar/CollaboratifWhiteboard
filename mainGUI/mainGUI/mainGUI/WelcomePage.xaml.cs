@@ -27,7 +27,7 @@ namespace mainGUI
             HostServer server = new HostServer(Width,Height);
             Thread sThread = new Thread(server.StartListening);
             sThread.Start();
-            await Navigation.PushAsync(new MainPage("127.0.0.1", true));
+            await Navigation.PushAsync(new MainPage(server, "127.0.0.1"));
         }
 
         private async void ClientButton_Clicked(object sender, EventArgs e)
@@ -40,12 +40,12 @@ namespace mainGUI
                 {
                     if (parsedIp.Length == 4 && IsValidOctet(n1) && IsValidOctet(n2) && IsValidOctet(n3) && IsValidOctet(n4))
                     {
-                        await Navigation.PushAsync(new MainPage(ip, false));
+                        await Navigation.PushAsync(new MainPage(ip));
                     }
                 }
             }
             else
-                await Navigation.PushAsync(new MainPage("127.0.0.1", false));
+                await Navigation.PushAsync(new MainPage("127.0.0.1"));
         }
 
         private bool IsValidOctet(int n)
