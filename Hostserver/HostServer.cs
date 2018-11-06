@@ -1,31 +1,29 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net;
 using System.Net.Sockets;
 
 namespace Hostserver
 {
     public class HostServer
     {
-        public HostListener listener { get; }
+        public HostListener Listener { get; }
 
         public HostServer(double size_x, double size_y)
         {
-            listener = new HostListener(size_x, size_y);
+            Listener = new HostListener(size_x, size_y);
         }
 
 
         public void StartListening()
         {
-            listener.StartNewWhiteboardListener();
+            Listener.StartNewWhiteboardListener();
             PackageReceivedHandler.OnReceivePackage += ReceivePackage;
             while (true)
             {
             }
         }
 
-        public List<Client> getClientList()
+        public List<Client> GetClientList()
         {
             return ClientController.ClientList;
         }
@@ -40,10 +38,10 @@ namespace Hostserver
         {
             foreach(Client c in ClientController.ClientList)
             {
-                if (c.Id != args.id)
+                if (c.Id != args.Id)
                 {
                     PacketSender sender = new PacketSender(c.Socket);
-                    sender.Send(args.data);
+                    sender.Send(args.Data);
                 }
                 else
                 {

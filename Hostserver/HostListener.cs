@@ -2,16 +2,14 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Diagnostics;
-using System.Threading;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Hostserver
 {
     public class HostListener
     {
-        public Socket ListenerSocket{get; private set; }
-        public short Port = 8080;
+        public Socket ListenerSocket { get; }
+        public const short Port = 8080;
         private readonly float width;
         private readonly float height;
 

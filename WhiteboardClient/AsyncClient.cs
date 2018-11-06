@@ -85,7 +85,7 @@ namespace WhiteboardClient
                     ColourHash = content["colorHash"];
                     Colour = SKColor.Parse(ColourHash);
                     strokeWidth = float.Parse(content["strokeWidth"]);
-                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, path = path, type = "PATH", strokeWidth = strokeWidth };
+                    UiEventArgs = new UpdateUIEventArgs { Colour = Colour, Path = path, Type = "PATH", StrokeWidth = strokeWidth };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "CIRCLE":
@@ -98,7 +98,7 @@ namespace WhiteboardClient
                     float y = float.Parse(coordinates.Split(' ')[1]);
                     SKPoint point = new SKPoint(x, y);
                     strokeWidth = float.Parse(content["strokeWidth"]);
-                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, radius = radius, point = point, strokeWidth = strokeWidth, type="CIRCLE" };
+                    UiEventArgs = new UpdateUIEventArgs { Colour = Colour, Radius = radius, Point = point, StrokeWidth = strokeWidth, Type="CIRCLE" };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "LINE":
@@ -113,7 +113,7 @@ namespace WhiteboardClient
                     y2 = float.Parse(coordinates.Split(' ')[3]);
                     start = new SKPoint(x1, y1);
                     end = new SKPoint(x2, y2);
-                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, start = start, end = end, strokeWidth = strokeWidth, type="LINE"};
+                    UiEventArgs = new UpdateUIEventArgs { Colour = Colour, Start = start, End = end, StrokeWidth = strokeWidth, Type="LINE"};
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "RECTANGLE":
@@ -128,18 +128,18 @@ namespace WhiteboardClient
                     y2 = float.Parse(coordinates.Split(' ')[3]);
                     start = new SKPoint(x1, y1);
                     end = new SKPoint(x2, y2);
-                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, start = start, end = end, strokeWidth = strokeWidth, type = "RECTANGLE" };
+                    UiEventArgs = new UpdateUIEventArgs { Colour = Colour, Start = start, End = end, StrokeWidth = strokeWidth, Type = "RECTANGLE" };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "SIZE":
                     content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
                     float w = float.Parse(content["width"]);
                     float h = float.Parse(content["height"]);
-                    UiEventArgs = new UpdateUIEventArgs { width = w, height = h, type = "SIZE" };
+                    UiEventArgs = new UpdateUIEventArgs { Width = w, Height = h, Type = "SIZE" };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "CLEAR":
-                    UiEventArgs = new UpdateUIEventArgs { type = "CLEAR" };
+                    UiEventArgs = new UpdateUIEventArgs { Type = "CLEAR" };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 default:

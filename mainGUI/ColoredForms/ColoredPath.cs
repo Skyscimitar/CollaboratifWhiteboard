@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SkiaSharp;
-using SkiaSharp.Views.Forms;
+﻿using SkiaSharp;
+
 
 namespace ColoredForms
 {
@@ -11,6 +8,5 @@ namespace ColoredForms
     public class ColoredPath : ColoredForm
     {
         public SKPath Path { get; set; }
-        public float StrokeWidth { get; set; }
     }
 }
