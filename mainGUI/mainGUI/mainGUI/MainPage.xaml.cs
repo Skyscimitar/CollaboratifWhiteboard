@@ -13,6 +13,7 @@ using WhiteboardClient;
 using System.Net.Sockets;
 using System.Diagnostics;
 using ColoredForms;
+using System.Net;
 
 namespace mainGUI
 {
@@ -27,6 +28,7 @@ namespace mainGUI
         private SKColor _color  = SKColors.Black;
         private float width;
         private float height;
+        public string IpAddress { get; }
         public Color color
         {
             get
@@ -43,9 +45,19 @@ namespace mainGUI
         private readonly ColorPage _colorPage;
         private AsyncClient asyncClient;
 
-        public MainPage(string ip)
+        public MainPage(string ip, bool host)
         {
             BindingContext = this;
+            if (host)
+            {
+                IpAddress = new WebClient().DownloadString("http://icanhazip.com");
+                IpAddress = String.Format("Whiteboard IP: {0}", IpAddress);
+                Debug.WriteLine(IpAddress);
+            }
+            else
+            {
+                IpAddress = String.Format("Whiteboard IP: {0}",ip);
+            }
             InitializeComponent();
             UpdateUIEventHandler.OnUpdateUI += UpdateUi;
             _colorPage = new ColorPage(this);
@@ -125,7 +137,7 @@ namespace mainGUI
 
             float s = Math.Min(sx, sy);
             canvas.Clear(SKColors.White);
-            //canvas.Scale(sx, sy);
+            canvas.Scale(sx, sy);
             var touchPathStroke = new SKPaint
             {
                 IsAntialias = true,

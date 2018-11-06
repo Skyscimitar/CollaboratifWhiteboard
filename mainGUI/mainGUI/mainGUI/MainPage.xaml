@@ -31,6 +31,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="0.5*"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" x:Name="SliderValue" Text="{Binding Source={x:Reference StrokeWidthSlider}, Path=Value, StringFormat='Stroke Width : {0:F0}'}" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" />
             <Slider Grid.Row="1" Maximum="100" Minimum="1" x:Name="StrokeWidthSlider" MaximumTrackColor="DarkGray"  VerticalOptions="Center" HorizontalOptions="Fill" Value="5" ValueChanged="StrokeWidth_ValueChanged"/>
@@ -53,6 +54,7 @@
             <Button Grid.Row="6" x:Name="RectangleButton" Text="Rectangle" BackgroundColor="LightGray" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="OptionButton_Clicked"/>
             <Button Grid.Row="7" x:Name="LineButton" Text="Line" BackgroundColor="LightGray" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="OptionButton_Clicked"/>
             <Button Grid.Row="8" x:Name="ClearButton" Text="Clear" BackgroundColor="LightGray" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="ClearButton_Clicked"/>
+            <Label Grid.Row="9" x:Name="IpAddressLabel" Text="{Binding IpAddress}" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" />
         </Grid>
         <!--Le canvas permettant de dessiner dessus.-->
         <views:SKCanvasView x:Name="View" Grid.Row="0" Grid.Column="1" PaintSurface="OnPainting" EnableTouchEvents="True" HorizontalOptions="Fill" VerticalOptions="Fill" Touch="SKCanvasView_Touch"/>
