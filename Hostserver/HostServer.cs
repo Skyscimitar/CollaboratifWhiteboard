@@ -52,7 +52,7 @@ namespace Hostserver
             {
                 //transfer the current state of the whiteboard to the client who
                 //requested it
-                int id = int.Parse((string)pdict["client_id"]);
+                int id = int.Parse(pdict["client_id"].ToString());
                 Client c = ClientController.ClientList[id];
                 PacketSender sender = new PacketSender(c.Socket);
                 sender.Send(args.data);
