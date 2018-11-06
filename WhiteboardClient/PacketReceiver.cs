@@ -1,9 +1,5 @@
 using System;
 using System.Text;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Diagnostics;
 using System.Net.Sockets;
 
 namespace WhiteboardClient
@@ -11,7 +7,7 @@ namespace WhiteboardClient
     public class PacketReceiver
     {
         private byte[] _buffer;
-        private Socket _receiveSocket;
+        private readonly Socket _receiveSocket;
 
         public PacketReceiver(Socket socket)
         {

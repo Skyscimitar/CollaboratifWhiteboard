@@ -4,11 +4,9 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ColoredForms;
-using SkiaSharp.Views.Forms;
 using SkiaSharp;
 
 namespace WhiteboardClient
@@ -17,14 +15,14 @@ namespace WhiteboardClient
     {
 
         private const int port = 8080;
-        public  Socket Client { get; private set; }
+        public Socket Client { get; private set; }
 
-        private static ManualResetEvent connectDone = new ManualResetEvent(false);
-        private static ManualResetEvent sendDone = new ManualResetEvent(false);
-        private static ManualResetEvent receiveDone = new ManualResetEvent(false);
+        private readonly static ManualResetEvent connectDone = new ManualResetEvent(false);
+        private readonly static ManualResetEvent sendDone = new ManualResetEvent(false);
+        private readonly static ManualResetEvent receiveDone = new ManualResetEvent(false);
 
-        private IPAddress IpAddress;
-        private IPEndPoint RemoteEndPoint;
+        private readonly IPAddress IpAddress;
+        private readonly IPEndPoint RemoteEndPoint;
         private PacketReceiver Receiver;
 
 
@@ -69,33 +67,22 @@ namespace WhiteboardClient
 
         private void ReceivePackage(Object o, PacketReceivedEventArgs eventArgs)
         {
-            Debug.WriteLine("Received Package");
             Dictionary<string, object> pdict = JsonConvert.DeserializeObject<Dictionary<string, object>>(eventArgs.data);
             Dictionary<string, string> content;
             SKColor Colour;
             string ColourHash;
-            SKPath path;
-            string SVGpath;
-            SKPoint point;
-            string coordinates;
-            float x;
-            float y;
             float strokeWidth;
-            float radius;
-            float x1;
-            float x2;
-            float y1;
-            float y2;
-            SKPoint start;
-            SKPoint end;
+            string coordinates;
+            float x1, x2, y1, y2;
+            SKPoint start, end;
             UpdateUIEventArgs UiEventArgs;
 
             switch (pdict["type"])
             {
                 case "PATH":
                     content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
-                    SVGpath = content["svgpath"].ToString();
-                    path = SKPath.ParseSvgPathData(SVGpath);
+                    string SVGpath = content["svgpath"].ToString();
+                    SKPath path = SKPath.ParseSvgPathData(SVGpath);
                     ColourHash = content["colorHash"];
                     Colour = SKColor.Parse(ColourHash);
                     strokeWidth = float.Parse(content["strokeWidth"]);
@@ -107,11 +94,11 @@ namespace WhiteboardClient
                     content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
                     ColourHash = content["colorHash"];
                     Colour = SKColor.Parse(ColourHash);
-                    radius = float.Parse(content["radius"]);
+                    float radius = float.Parse(content["radius"]);
                     coordinates = content["coordinates"];
-                    x = float.Parse(coordinates.Split(' ')[0]);
-                    y = float.Parse(coordinates.Split(' ')[1]);
-                    point = new SKPoint(x, y);
+                    float x = float.Parse(coordinates.Split(' ')[0]);
+                    float y = float.Parse(coordinates.Split(' ')[1]);
+                    SKPoint point = new SKPoint(x, y);
                     strokeWidth = float.Parse(content["strokeWidth"]);
                     UiEventArgs = new UpdateUIEventArgs { colour = Colour, radius = radius, point = point, strokeWidth = strokeWidth, type="CIRCLE" };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
