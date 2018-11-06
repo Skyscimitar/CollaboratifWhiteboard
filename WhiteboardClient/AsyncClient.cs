@@ -57,7 +57,6 @@ namespace WhiteboardClient
                 Client = (Socket)ar.AsyncState;
                 Client.EndConnect(ar);
                 Debug.WriteLine("Socket connected to : {0}", Client.RemoteEndPoint);
-                //request the current state of the whiteboard from the host
                 connectDone.Set();
             } catch (Exception e)
             {
@@ -119,11 +118,44 @@ namespace WhiteboardClient
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "RESTORE":
+                    JArray jArray = JArray.Parse(pdict["content"].ToString());
+                    List<object> forms = DictToFormsList(jArray);
+                    UiEventArgs = new UpdateUIEventArgs { Type = "RESTORE", Forms = forms };
                     break;
                 default:
                     Console.WriteLine("error parsing received data: {0}", eventArgs.data);
                     throw new ArgumentException(eventArgs.data);
             }
+        }
+
+        private List<object> DictToFormsList(JArray content)
+        {
+            List<object> forms = new List<object>();
+            foreach(JObject coloredForm in content)
+            {
+                Dictionary<string, object> pdict = JsonConvert.DeserializeObject<Dictionary<string, object>>(coloredForm.ToString());
+                Dictionary<string, string> formElement = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
+                switch (pdict["type"])
+                {
+                    case "LINE":
+                        ColoredLine line = DictToLine(formElement);
+                        forms.Add(line);
+                        break;
+                    case "CIRCLE":
+                        ColoredCircle circle = DictToCircle(formElement);
+                        forms.Add(circle);
+                        break;
+                    case "PATH":
+                        ColoredPath path = DictToPath(formElement);
+                        forms.Add(path);
+                        break;
+                    case "RECTANGLE":
+                        ColoredRectangle rectangle = DictToRectangle(formElement);
+                        forms.Add(rectangle);
+                        break;
+                }
+            }
+            return forms;
         }
 
         private ColoredPath DictToPath(Dictionary<string, string> content)
@@ -150,7 +182,7 @@ namespace WhiteboardClient
             SKPoint end = new SKPoint(x2, y2);
             return new ColoredLine { Start = start, End = end, Color = Colour, StrokeWidth = strokeWidth };
         }
-
+        
         private ColoredCircle DictToCircle(Dictionary<string, string> content)
         {
             string ColourHash = content["colorHash"];
