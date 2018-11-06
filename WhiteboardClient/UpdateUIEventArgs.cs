@@ -1,20 +1,22 @@
 ﻿using System;
 using SkiaSharp.Views.Forms;
 using SkiaSharp;
+using ColoredForms;
+using System.Collections.Generic;
 
 namespace WhiteboardClient
 {
     public class UpdateUIEventArgs: EventArgs
     {
-        public SKPath Path { get; set; }
-        public SKColor Colour { get; set; }
-        public SKPoint Point { get; set; }
-        public SKPoint Start { get; set; }
-        public SKPoint End { get; set; }
-        public float StrokeWidth { get; set; }
-        public float Radius { get; set; }
         public string Type { get; set; }
+        public int client_id { get; set; }
+        public ColoredRectangle Rectangle { get; set; }
+        public ColoredCircle Circle { get; set; }
+        public ColoredLine Line { get; set; }
+        public ColoredPath Path { get; set; }
+        public List<object> Forms { get; set; }
         public float Width { get; set; }
         public float Height { get; set; }
+
     }
 }

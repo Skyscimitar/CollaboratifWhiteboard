@@ -37,6 +37,10 @@ namespace Hostserver
                 ClientController.AddClient(NewConnectionSocket);
                 ListenerSocket.BeginAccept(AcceptNewConnection, ListenerSocket);
                 SendSize(NewConnectionSocket);
+                if (ClientController.ClientList.Count > 1)
+                {
+                    RestoreWhiteboard(ClientController.ClientList[ClientController.ClientList.Count - 1]);
+                }
             }
             catch (Exception e)
             {
@@ -51,6 +55,15 @@ namespace Hostserver
                       new JProperty("content", new JObject(
                           new JProperty("width", width),
                           new JProperty("height", height))));
+            sender.Send(json.ToString());
+        }
+
+        private void RestoreWhiteboard(Client client)
+        {
+            int id = client.Id;
+            PacketSender sender = new PacketSender(ClientController.ClientList[0].Socket);
+            JObject json = new JObject(new JProperty("type", "REQUEST_STATUS"),
+                new JProperty("content", new JObject(new JProperty("id", id.ToString()))));
             sender.Send(json.ToString());
         }
     }

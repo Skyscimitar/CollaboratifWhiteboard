@@ -15,7 +15,7 @@ namespace mainGUI
     public partial class MainPage : ContentPage
     {
         private readonly Dictionary<long,object> temporaryForms =new Dictionary<long,object>();
-        private readonly List<object> forms = new List<object>();
+        private List<object> forms = new List<object>();
         private string option; //variable stockant l'option choisie par l'utilisateur (trait, gomme, cercle, etc.)
         private SKColor _color  = SKColors.Black;
         private float width;
@@ -67,42 +67,19 @@ namespace mainGUI
                 switch (eventArgs.Type)
                 {
                     case "PATH":
-                        ColoredPath coloredPath = new ColoredPath
-                        {
-                            Path = eventArgs.Path,
-                            Color = eventArgs.Colour,
-                            StrokeWidth = eventArgs.StrokeWidth
-                        };
+                        ColoredPath coloredPath = eventArgs.Path;
                         forms.Add(coloredPath);
                         break;
                     case "CIRCLE":
-                        ColoredCircle coloredCircle = new ColoredCircle
-                        {
-                            Radius = eventArgs.Radius,
-                            StrokeWidth = eventArgs.StrokeWidth,
-                            Center = eventArgs.Point,
-                            Color = eventArgs.Colour
-                        };
+                        ColoredCircle coloredCircle = eventArgs.Circle;
                         forms.Add(coloredCircle);
                         break;
                     case "LINE":
-                        ColoredLine coloredLine = new ColoredLine
-                        {
-                            Color = eventArgs.Colour,
-                            Start = eventArgs.Start,
-                            End = eventArgs.End,
-                            StrokeWidth = eventArgs.StrokeWidth
-                        };
+                        ColoredLine coloredLine = eventArgs.Line;
                         forms.Add(coloredLine);
                         break;
                     case "RECTANGLE":
-                        ColoredRectangle coloredRectangle = new ColoredRectangle
-                        {
-                            Color = eventArgs.Colour,
-                            Start = eventArgs.Start,
-                            End = eventArgs.End,
-                            StrokeWidth = eventArgs.StrokeWidth
-                        };
+                        ColoredRectangle coloredRectangle = eventArgs.Rectangle;
                         forms.Add(coloredRectangle);
                         break;
                     case "CLEAR":
@@ -111,6 +88,12 @@ namespace mainGUI
                     case "SIZE":
                         width = eventArgs.Width;
                         height = eventArgs.Height;
+                        break;
+                    case "REQUEST_STATUS":
+                        asyncClient.RestoreWhiteboard(this.forms, eventArgs.client_id);
+                        break;
+                    case "RESTORE":
+                        forms = eventArgs.Forms;
                         break;
                 }
             View.InvalidateSurface();
