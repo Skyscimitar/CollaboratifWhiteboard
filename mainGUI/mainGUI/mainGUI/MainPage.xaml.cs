@@ -64,44 +64,44 @@ namespace mainGUI
         {
             lock (forms)
             {
-                switch (eventArgs.type)
+                switch (eventArgs.Type)
                 {
                     case "PATH":
                         ColoredPath coloredPath = new ColoredPath
                         {
-                            Path = eventArgs.path,
-                            Color = eventArgs.colour,
-                            StrokeWidth = eventArgs.strokeWidth
+                            Path = eventArgs.Path,
+                            Color = eventArgs.Colour,
+                            StrokeWidth = eventArgs.StrokeWidth
                         };
                         forms.Add(coloredPath);
                         break;
                     case "CIRCLE":
                         ColoredCircle coloredCircle = new ColoredCircle
                         {
-                            Radius = eventArgs.radius,
-                            StrokeWidth = eventArgs.strokeWidth,
-                            Center = eventArgs.point,
-                            Color = eventArgs.colour
+                            Radius = eventArgs.Radius,
+                            StrokeWidth = eventArgs.StrokeWidth,
+                            Center = eventArgs.Point,
+                            Color = eventArgs.Colour
                         };
                         forms.Add(coloredCircle);
                         break;
                     case "LINE":
                         ColoredLine coloredLine = new ColoredLine
                         {
-                            Color = eventArgs.colour,
-                            Start = eventArgs.start,
-                            End = eventArgs.end,
-                            StrokeWidth = eventArgs.strokeWidth
+                            Color = eventArgs.Colour,
+                            Start = eventArgs.Start,
+                            End = eventArgs.End,
+                            StrokeWidth = eventArgs.StrokeWidth
                         };
                         forms.Add(coloredLine);
                         break;
                     case "RECTANGLE":
                         ColoredRectangle coloredRectangle = new ColoredRectangle
                         {
-                            Color = eventArgs.colour,
-                            Start = eventArgs.start,
-                            End = eventArgs.end,
-                            StrokeWidth = eventArgs.strokeWidth
+                            Color = eventArgs.Colour,
+                            Start = eventArgs.Start,
+                            End = eventArgs.End,
+                            StrokeWidth = eventArgs.StrokeWidth
                         };
                         forms.Add(coloredRectangle);
                         break;
@@ -109,8 +109,8 @@ namespace mainGUI
                         forms.Clear();
                         break;
                     case "SIZE":
-                        width = eventArgs.width;
-                        height = eventArgs.height;
+                        width = eventArgs.Width;
+                        height = eventArgs.Height;
                         break;
                 }
             View.InvalidateSurface();
@@ -408,7 +408,7 @@ namespace mainGUI
         protected override bool OnBackButtonPressed()
         {
             if (hostServer != null)
-                hostServer.listener.ListenerSocket.Close();
+                hostServer.Listener.ListenerSocket.Close();
             return base.OnBackButtonPressed();
         }
     }

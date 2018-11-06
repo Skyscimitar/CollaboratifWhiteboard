@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SkiaSharp;
+﻿using SkiaSharp;
 
 namespace ColoredForms
 {
@@ -9,6 +6,5 @@ namespace ColoredForms
     {
         public SKPoint Start { get; set; }
         public SKPoint End { get; set; }
-        public float StrokeWidth { get; set; }
     }
 }

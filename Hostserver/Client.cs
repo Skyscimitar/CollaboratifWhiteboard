@@ -1,17 +1,12 @@
-using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Net;
 using System.Net.Sockets;
-using System.Threading;
 
 namespace Hostserver
 {
     public class Client
     {
-        public Socket Socket {get; set;}
-        public int Id {get; private set;}
-        private PacketReceiver receiver;
+        public Socket Socket {get; }
+        public int Id {get; }
+        private readonly PacketReceiver receiver;
 
         //add package receiver and package senders
 

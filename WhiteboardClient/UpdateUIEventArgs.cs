@@ -6,15 +6,15 @@ namespace WhiteboardClient
 {
     public class UpdateUIEventArgs: EventArgs
     {
-        public SKPath path { get; set; }
-        public SKColor colour { get; set; }
-        public SKPoint point { get; set; }
-        public SKPoint start { get; set; }
-        public SKPoint end { get; set; }
-        public float strokeWidth { get; set; }
-        public float radius { get; set; }
-        public string type { get; set; }
-        public float width { get; set; }
-        public float height { get; set; }
+        public SKPath Path { get; set; }
+        public SKColor Colour { get; set; }
+        public SKPoint Point { get; set; }
+        public SKPoint Start { get; set; }
+        public SKPoint End { get; set; }
+        public float StrokeWidth { get; set; }
+        public float Radius { get; set; }
+        public string Type { get; set; }
+        public float Width { get; set; }
+        public float Height { get; set; }
     }
 }
