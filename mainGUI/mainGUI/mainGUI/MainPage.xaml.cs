@@ -47,8 +47,6 @@ namespace mainGUI
         {
             BindingContext = this;
             InitializeComponent();
-            width = (float)this.Width;
-            height = (float)this.Height;
             UpdateUIEventHandler.OnUpdateUI += UpdateUi;
             _colorPage = new ColorPage(this);
             asyncClient = new AsyncClient(ip);
@@ -92,7 +90,6 @@ namespace mainGUI
                         break;
                     case "CLEAR":
                         forms.Clear();
-                        temporaryForms.Clear();
                         break;
                     case "SIZE":
                         width = eventArgs.width;
@@ -108,13 +105,16 @@ namespace mainGUI
         {
             var surface = e.Surface;
             var canvas = surface.Canvas;
-            float w = (float)this.Width;
-            float h = (float)this.Height;
+            float w = (float)Width;
+            float h = (float)Height;
+            if (width == 0)
+                width = w;
+            if (height == 0)
+                height = h;
             float sx = w / width;
             float sy = h / height;
-            float s = Math.Min(sx, sy);
-            canvas.Scale(sx, sy);
             canvas.Clear(SKColors.White);
+            canvas.Scale(sx, sy);
             var touchPathStroke = new SKPaint
             {
                 IsAntialias = true,

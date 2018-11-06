@@ -136,6 +136,7 @@ namespace WhiteboardClient
                     float w = float.Parse(content["width"]);
                     float h = float.Parse(content["height"]);
                     UiEventArgs = new UpdateUIEventArgs { width = w, height = h, type = "SIZE" };
+                    break;
                 case "CLEAR":
                     UiEventArgs = new UpdateUIEventArgs { type = "CLEAR" };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
