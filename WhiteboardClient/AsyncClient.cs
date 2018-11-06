@@ -136,6 +136,8 @@ namespace WhiteboardClient
                     float w = float.Parse(content["width"]);
                     float h = float.Parse(content["height"]);
                     UiEventArgs = new UpdateUIEventArgs { width = w, height = h, type = "SIZE" };
+                case "CLEAR":
+                    UiEventArgs = new UpdateUIEventArgs { type = "CLEAR" };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 default:
@@ -197,6 +199,15 @@ namespace WhiteboardClient
                     new JProperty("coordinates", coordinates),
                     new JProperty("strokeWidth", strokeWidth))));
             SendData(json);
+        }
+
+        public void Send(string action)
+        {
+            if (action == "CLEAR")
+            {
+                JObject json = new JObject(new JProperty("type", "CLEAR"));
+                SendData(json);
+            }
         }
     }
 }
