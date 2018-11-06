@@ -121,6 +121,7 @@ namespace WhiteboardClient
                     JArray jArray = JArray.Parse(pdict["content"].ToString());
                     List<object> forms = DictToFormsList(jArray);
                     UiEventArgs = new UpdateUIEventArgs { Type = "RESTORE", Forms = forms };
+                    UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 default:
                     Console.WriteLine("error parsing received data: {0}", eventArgs.data);
