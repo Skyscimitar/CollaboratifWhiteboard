@@ -15,7 +15,7 @@ namespace mainGUI
     public partial class MainPage : ContentPage
     {
         private readonly Dictionary<long,object> temporaryForms =new Dictionary<long,object>();
-        private readonly List<object> forms = new List<object>();
+        private List<object> forms = new List<object>();
         private string option; //variable stockant l'option choisie par l'utilisateur (trait, gomme, cercle, etc.)
         private SKColor _color  = SKColors.Black;
         private float width;
@@ -64,87 +64,22 @@ namespace mainGUI
         {
             lock (forms)
             {
-<<<<<<< HEAD
-                case "PATH":
-                    ColoredPath coloredPath = new ColoredPath
-                    {
-                        Path = eventArgs.path,
-                        Color = eventArgs.colour,
-                        StrokeWidth = eventArgs.strokeWidth
-                    };
-                    forms.Add(coloredPath);
-                    break;
-                case "CIRCLE":
-                    ColoredCircle coloredCircle = new ColoredCircle
-                    {
-                        Radius = eventArgs.radius,
-                        StrokeWidth = eventArgs.strokeWidth,
-                        Center = eventArgs.point,
-                        Color = eventArgs.colour
-                    };
-                    forms.Add(coloredCircle);
-                    break;
-                case "LINE":
-                    Debug.WriteLine("here");
-                    ColoredLine coloredLine = new ColoredLine
-                    {
-                        Color = eventArgs.colour,
-                        Start = eventArgs.start,
-                        End = eventArgs.end,
-                        StrokeWidth = eventArgs.strokeWidth
-                    };
-                    forms.Add(coloredLine);
-                    break;
-                case "REQUEST_STATUS":
-                    //triggered when a new client is requesting the current status of the whiteboard
-                    //only called on the host's side
-                    break;
-                case "RESTORE":
-                    //triggered when the client connects to a whiteboard and needs to sync his display with 
-                    //the current status of the whiteboard
-                    break;
-            }
-
-=======
-                switch (eventArgs.type)
+                switch (eventArgs.Type)
                 {
                     case "PATH":
-                        ColoredPath coloredPath = new ColoredPath
-                        {
-                            Path = eventArgs.path,
-                            Color = eventArgs.colour,
-                            StrokeWidth = eventArgs.strokeWidth
-                        };
+                        ColoredPath coloredPath = eventArgs.Path;
                         forms.Add(coloredPath);
                         break;
                     case "CIRCLE":
-                        ColoredCircle coloredCircle = new ColoredCircle
-                        {
-                            Radius = eventArgs.radius,
-                            StrokeWidth = eventArgs.strokeWidth,
-                            Center = eventArgs.point,
-                            Color = eventArgs.colour
-                        };
+                        ColoredCircle coloredCircle = eventArgs.Circle;
                         forms.Add(coloredCircle);
                         break;
                     case "LINE":
-                        ColoredLine coloredLine = new ColoredLine
-                        {
-                            Color = eventArgs.colour,
-                            Start = eventArgs.start,
-                            End = eventArgs.end,
-                            StrokeWidth = eventArgs.strokeWidth
-                        };
+                        ColoredLine coloredLine = eventArgs.Line;
                         forms.Add(coloredLine);
                         break;
                     case "RECTANGLE":
-                        ColoredRectangle coloredRectangle = new ColoredRectangle
-                        {
-                            Color = eventArgs.colour,
-                            Start = eventArgs.start,
-                            End = eventArgs.end,
-                            StrokeWidth = eventArgs.strokeWidth
-                        };
+                        ColoredRectangle coloredRectangle = eventArgs.Rectangle;
                         forms.Add(coloredRectangle);
                         break;
                     case "CLEAR":
@@ -154,8 +89,13 @@ namespace mainGUI
                         width = eventArgs.width;
                         height = eventArgs.height;
                         break;
+                    case "REQUEST_STATUS":
+                        asyncClient.RestoreWhiteboard(this.forms, eventArgs.client_id);
+                        break;
+                    case "RESTORE":
+                        forms = eventArgs.Forms;
+                        break;
                 }
->>>>>>> master
             View.InvalidateSurface();
             }
         }

@@ -68,53 +68,29 @@ namespace WhiteboardClient
         private void ReceivePackage(Object o, PacketReceivedEventArgs eventArgs)
         {
             Dictionary<string, object> pdict = JsonConvert.DeserializeObject<Dictionary<string, object>>(eventArgs.data);
-            Dictionary<string, string> content;
-            SKColor Colour;
-            string ColourHash;
-            float strokeWidth;
-            string coordinates;
-            float x1, x2, y1, y2;
-            SKPoint start, end;
+            Dictionary<string, string> content;;
+
+
             UpdateUIEventArgs UiEventArgs;
 
             switch (pdict["type"])
             {
                 case "PATH":
                     content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
-                    string SVGpath = content["svgpath"].ToString();
-                    SKPath path = SKPath.ParseSvgPathData(SVGpath);
-                    ColourHash = content["colorHash"];
-                    Colour = SKColor.Parse(ColourHash);
-                    strokeWidth = float.Parse(content["strokeWidth"]);
-                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, path = path, type = "PATH", strokeWidth = strokeWidth };
+                    ColoredPath path = DictToPath(content);
+                    UiEventArgs = new UpdateUIEventArgs { Type = "PATH", Path = path};
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "CIRCLE":
                     content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
-                    ColourHash = content["colorHash"];
-                    Colour = SKColor.Parse(ColourHash);
-                    float radius = float.Parse(content["radius"]);
-                    coordinates = content["coordinates"];
-                    float x = float.Parse(coordinates.Split(' ')[0]);
-                    float y = float.Parse(coordinates.Split(' ')[1]);
-                    SKPoint point = new SKPoint(x, y);
-                    strokeWidth = float.Parse(content["strokeWidth"]);
-                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, radius = radius, point = point, strokeWidth = strokeWidth, type="CIRCLE" };
+                    ColoredCircle circle = DictToCircle(content);
+                    UiEventArgs = new UpdateUIEventArgs { Type = "CIRCLE", Circle = circle };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "LINE":
                     content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
-                    ColourHash = content["colorHash"];
-                    Colour = SKColor.Parse(ColourHash);
-                    strokeWidth = float.Parse(content["strokeWidth"]);
-                    coordinates = content["coordinates"];
-                    x1 = float.Parse(coordinates.Split(' ')[0]);
-                    x2 = float.Parse(coordinates.Split(' ')[1]);
-                    y1 = float.Parse(coordinates.Split(' ')[2]);
-                    y2 = float.Parse(coordinates.Split(' ')[3]);
-                    start = new SKPoint(x1, y1);
-                    end = new SKPoint(x2, y2);
-                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, start = start, end = end, strokeWidth = strokeWidth, type="LINE"};
+                    ColoredLine line = DictToLine(content);
+                    UiEventArgs = new UpdateUIEventArgs {Type="LINE", Line = line};
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "REQUEST_STATUS":
@@ -122,38 +98,85 @@ namespace WhiteboardClient
                     content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
                     int id = int.Parse(content["id"]);
                     //the id corresponds to the client's id from the server's perspective
-                    UiEventArgs = new UpdateUIEventArgs { type = "REQUEST_STATUS", client_id = id };
+                    UiEventArgs = new UpdateUIEventArgs { Type = "REQUEST_STATUS", client_id = id };
+                    UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "RECTANGLE":
                     content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
-                    ColourHash = content["colorHash"];
-                    Colour = SKColor.Parse(ColourHash);
-                    strokeWidth = float.Parse(content["strokeWidth"]);
-                    coordinates = content["coordinates"];
-                    x1 = float.Parse(coordinates.Split(' ')[0]);
-                    x2 = float.Parse(coordinates.Split(' ')[1]);
-                    y1 = float.Parse(coordinates.Split(' ')[2]);
-                    y2 = float.Parse(coordinates.Split(' ')[3]);
-                    start = new SKPoint(x1, y1);
-                    end = new SKPoint(x2, y2);
-                    UiEventArgs = new UpdateUIEventArgs { colour = Colour, start = start, end = end, strokeWidth = strokeWidth, type = "RECTANGLE" };
+                    ColoredRectangle rectangle = DictToRectangle(content);
+                    UiEventArgs = new UpdateUIEventArgs { Rectangle = rectangle, Type = "RECTANGLE" };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "SIZE":
                     content = JsonConvert.DeserializeObject<Dictionary<string, string>>(pdict["content"].ToString());
                     float w = float.Parse(content["width"]);
                     float h = float.Parse(content["height"]);
-                    UiEventArgs = new UpdateUIEventArgs { width = w, height = h, type = "SIZE" };
+                    UiEventArgs = new UpdateUIEventArgs { width = w, height = h, Type = "SIZE" };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "CLEAR":
-                    UiEventArgs = new UpdateUIEventArgs { type = "CLEAR" };
+                    UiEventArgs = new UpdateUIEventArgs { Type = "CLEAR" };
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
+                    break;
+                case "RESTORE":
                     break;
                 default:
                     Console.WriteLine("error parsing received data: {0}", eventArgs.data);
-                    break;
+                    throw new ArgumentException(eventArgs.data);
             }
+        }
+
+        private ColoredPath DictToPath(Dictionary<string, string> content)
+        {
+            string SVGpath = content["svgpath"].ToString();
+            SKPath path = SKPath.ParseSvgPathData(SVGpath);
+            string ColourHash = content["colorHash"];
+            SKColor Colour = SKColor.Parse(ColourHash);
+            float strokeWidth = float.Parse(content["strokeWidth"]);
+            return new ColoredPath { Color = Colour, Path = path, StrokeWidth = strokeWidth };
+        }
+
+        private ColoredLine DictToLine(Dictionary<string, string> content)
+        {
+            string ColourHash = content["colorHash"];
+            SKColor Colour = SKColor.Parse(ColourHash);
+            float strokeWidth = float.Parse(content["strokeWidth"]);
+            string coordinates = content["coordinates"];
+            float x1 = float.Parse(coordinates.Split(' ')[0]);
+            float x2 = float.Parse(coordinates.Split(' ')[1]);
+            float y1 = float.Parse(coordinates.Split(' ')[2]);
+            float y2 = float.Parse(coordinates.Split(' ')[3]);
+            SKPoint start = new SKPoint(x1, y1);
+            SKPoint end = new SKPoint(x2, y2);
+            return new ColoredLine { Start = start, End = end, Color = Colour, StrokeWidth = strokeWidth };
+        }
+
+        private ColoredCircle DictToCircle(Dictionary<string, string> content)
+        {
+            string ColourHash = content["colorHash"];
+            SKColor Colour = SKColor.Parse(ColourHash);
+            float radius = float.Parse(content["radius"]);
+            string coordinates = content["coordinates"];
+            float x = float.Parse(coordinates.Split(' ')[0]);
+            float y = float.Parse(coordinates.Split(' ')[1]);
+            SKPoint point = new SKPoint(x, y);
+            float strokeWidth = float.Parse(content["strokeWidth"]);
+            return new ColoredCircle { Center = point, Color = Colour, Radius = radius, StrokeWidth = strokeWidth };
+        }
+
+        private ColoredRectangle DictToRectangle(Dictionary<string, string> content)
+        {
+            string ColourHash = content["colorHash"];
+            SKColor color = SKColor.Parse(ColourHash);
+            float strokeWidth = float.Parse(content["strokeWidth"]);
+            string coordinates = content["coordinates"];
+            float x1 = float.Parse(coordinates.Split(' ')[0]);
+            float x2 = float.Parse(coordinates.Split(' ')[1]);
+            float y1 = float.Parse(coordinates.Split(' ')[2]);
+            float y2 = float.Parse(coordinates.Split(' ')[3]);
+            SKPoint start = new SKPoint(x1, y1);
+            SKPoint end = new SKPoint(x2, y2);
+            return new ColoredRectangle {Start = start, End = end, Color = color, StrokeWidth = strokeWidth };
         }
 
         private void SendData(JObject json)
