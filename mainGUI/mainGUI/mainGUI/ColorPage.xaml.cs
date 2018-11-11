@@ -6,6 +6,7 @@ using Xamarin.Forms.Xaml;
 
 namespace mainGUI
 {
+    /*Page popup apparaissant lorsqu'on appuie sur le bouton couleur*/
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ColorPage : PopupPage
     {

@@ -4,6 +4,7 @@ using Xamarin.Forms.Xaml;
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace mainGUI
 {
+    /* Classe auto-générée qui permet de définir le comportement de l'application */
     public partial class App : Application
     {
         public App()
