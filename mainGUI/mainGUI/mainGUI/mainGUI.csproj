@@ -15,8 +15,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Hostserver\Hostserver.csproj" />
-    <ProjectReference Include="..\..\..\WhiteboardClient\WhiteboardClient.csproj" />
+    <ProjectReference Include="..\..\ClassLibrary1\Network.csproj" />
     <ProjectReference Include="..\..\ColoredForms\ColoredForms.csproj" />
   </ItemGroup>
   <ItemGroup>

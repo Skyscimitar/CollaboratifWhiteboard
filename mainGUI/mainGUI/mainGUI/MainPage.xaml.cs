@@ -4,10 +4,10 @@ using Xamarin.Forms;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Rg.Plugins.Popup.Services;
-using WhiteboardClient;
 using ColoredForms;
 using System.Net;
-using Hostserver;
+
+using Network;
 
 namespace mainGUI
 {
