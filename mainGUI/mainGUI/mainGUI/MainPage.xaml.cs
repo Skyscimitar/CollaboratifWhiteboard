@@ -11,17 +11,27 @@ using Hostserver;
 
 namespace mainGUI
 {
-    //Ici on définit les actions à effectuer sur cette page.
+    /*Page principale contenant le whiteboard*/
     public partial class MainPage : ContentPage
-    {
-        private readonly Dictionary<long,object> temporaryForms =new Dictionary<long,object>();
+    {        
+        //formes en train d'être dessinées
+        private readonly Dictionary<long,object> temporaryForms =new Dictionary<long,object>(); 
+        //formes finies
         private List<object> forms = new List<object>();
-        private string option; //variable stockant l'option choisie par l'utilisateur (trait, gomme, cercle, etc.)
+        //variable stockant l'option choisie par l'utilisateur (trait, gomme, cercle, etc.)
+        private string option; 
+        //couleur utilisée pour afficher les dessins
         private SKColor _color  = SKColors.Black;
+        /*variable initialisée à la largeur de l'écran,
+         mais prenant la valeur de la largeur de l'écran hôte au moment de la connexion*/
         private float width;
+        //Idem width
         private float height;
+        //Adresse IP locale
         public string IpAddress { get; }
+        //Server hôte
         private readonly HostServer hostServer;
+        //couleur utilisée pour le bouton couleur
         public Color color
         {
             get
@@ -34,11 +44,13 @@ namespace mainGUI
                 _color = value.ToSKColor();
             }
         }
+        //Largeur du trait pour les dessins
         private float strokeWidth = 5;
+        //Client qui communique les données du whiteboard avec le serveur
         private readonly AsyncClient asyncClient;
 
+        //Constructeur appelé quand on demande à être hôte
         public MainPage(HostServer server, string ip)
-
         {
             hostServer = server;
             BindingContext = this;
@@ -50,6 +62,7 @@ namespace mainGUI
             asyncClient.StartClient();
         }
 
+        //Constructeur appelé quand on souhaite être client
         public MainPage(string ip)
         {
             BindingContext = this;
@@ -60,6 +73,7 @@ namespace mainGUI
             asyncClient.StartClient();
         }
 
+        //Evenement déclenché quand une nouvelle forme ou instruction est reçue par le client
         private void UpdateUi(Object o, UpdateUIEventArgs eventArgs)
         {
             lock (forms)
@@ -100,7 +114,8 @@ namespace mainGUI
             }
         }
 
-        private void OnPainting(object sender, SKPaintSurfaceEventArgs e) //méthode définissant ce qui s'affiche à l'écran en temps réel
+        //Evenement déclenché à chaque changement sur le whiteboard, redessinant toutes les formes
+        private void OnPainting(object sender, SKPaintSurfaceEventArgs e)
         {
             var surface = e.Surface;
             var canvas = surface.Canvas;
@@ -113,7 +128,8 @@ namespace mainGUI
             float sx = w / width;
             float sy = h / height;
             canvas.Clear(SKColors.White);
-            canvas.Scale(sx, sy);
+            /*canvas.Scale(sx, sy); 
+            Decommenter pour avoir une version qui scale selon la taille de la fenêtre, buggée*/
 
             var touchStroke = new SKPaint
             {
@@ -201,7 +217,7 @@ namespace mainGUI
             }
         }
 
-        //méthode définissant ce qu'il se passe quand on appuie sur l'écran. On créera certainement des sous-méthodes selon l'option à l'avenir
+        //Methode appelée lorsqu'on se déplace sur l'écran
         private void SKCanvasView_Touch(object sender, SKTouchEventArgs e) 
         {
             if (option == "rubber")
@@ -219,7 +235,7 @@ namespace mainGUI
             ((SKCanvasView)sender).InvalidateSurface();
         }
 
-        //Ces méthodes bouton permettant de choisir l'option seront à unifier (elles font toutes la même chose en fait)
+        //Définit l'option choisie selon le bouton sur lequel on a appuyé
         private void OptionButton_Clicked(object sender, EventArgs e)
         {
             var button = (Button)sender;
@@ -244,7 +260,7 @@ namespace mainGUI
         }
 
 
-        //Ce bouton vide la zône de dessin, sera potentiellement à réserver à l'hôte.
+        //Ce bouton vide la zône de dessin et génère un popup pour confirmation.
         private async void ClearButton_Clicked(object sender, EventArgs e)
         {
             var view = (SKCanvasView) this.FindByName("View");
@@ -258,11 +274,13 @@ namespace mainGUI
             }
         }
 
+        //Ouvre le popup des couleurs quand on appuie sur le bouton couleurs
         private async void ColorButton_Clicked(object sender, EventArgs e)
         {
             await PopupNavigation.Instance.PushAsync(new ColorPage(this));
         }
 
+        //Appelée quand l'option est path et qu'on se déplace sur le canvas
         private void PathAction(SKTouchEventArgs e, SKColor color)
         {
             switch (e.ActionType)
@@ -294,6 +312,7 @@ namespace mainGUI
             }
         }
 
+        //Idem PathAction avec des cercles
         private void CircleAction(SKTouchEventArgs e, SKColor color)
         {
             switch (e.ActionType)
@@ -323,6 +342,7 @@ namespace mainGUI
             }
         }
 
+        //Idem PathAction avec des lignes droites
         private void LineAction(SKTouchEventArgs e, SKColor color)
         {
             switch (e.ActionType)
@@ -352,7 +372,8 @@ namespace mainGUI
                     break;
             }
         }
-
+        
+        //Idem PathAction avec des rectangles
         private void RectangleAction(SKTouchEventArgs e, SKColor color)
         {
             switch (e.ActionType)
@@ -383,11 +404,13 @@ namespace mainGUI
             }
         }
 
+        //Appelée lorsque le slider Strokewidth est déplacé
         private void StrokeWidth_ValueChanged(object sender, ValueChangedEventArgs e)
         {
             strokeWidth = (float)e.NewValue;
         }
 
+        //Déconnecte le server quand on clique sur précédent.
         protected override bool OnBackButtonPressed()
         {
             if (hostServer != null)
