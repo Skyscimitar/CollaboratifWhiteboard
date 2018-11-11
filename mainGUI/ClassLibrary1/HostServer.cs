@@ -6,6 +6,10 @@ using Newtonsoft.Json.Linq;
 
 namespace Network
 {
+    /// <summary>
+    /// Wrapper of the HostListener and server logic, exposes all methods needed by the UI
+    /// of the application hosting the whiteboard.
+    /// </summary>
     public class HostServer
     {
         public HostListener Listener { get; }

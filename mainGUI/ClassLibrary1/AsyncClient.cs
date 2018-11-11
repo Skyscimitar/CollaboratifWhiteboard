@@ -11,6 +11,9 @@ using SkiaSharp;
 
 namespace Network
 {
+    /// <summary>
+    /// Client object used by the application to connect to the server.
+    /// </summary>
     public class AsyncClient
     {
         private const int port = 8080;
@@ -72,6 +75,7 @@ namespace Network
 
             UpdateUIEventArgs UiEventArgs;
 
+            //handle package reception depending on the type of information it contains then triggers UI event
             switch (pdict["type"])
             {
                 case "PATH":
@@ -118,6 +122,7 @@ namespace Network
                     UpdateUIEventHandler.OnUpdateUI(this, UiEventArgs);
                     break;
                 case "RESTORE":
+                    //used to provide the current status of the whiteboard to a client that connects to the app
                     JArray jArray = JArray.Parse(pdict["content"].ToString());
                     List<object> forms = DictToFormsList(jArray);
                     UiEventArgs = new UpdateUIEventArgs { Type = "RESTORE", Forms = forms };
@@ -129,6 +134,7 @@ namespace Network
             }
         }
 
+        //Convert Dictionary to FormList for the UI
         private List<object> DictToFormsList(JArray content)
         {
             List<object> forms = new List<object>();
@@ -159,6 +165,7 @@ namespace Network
             return forms;
         }
 
+        //Convert received dictionary to ColoredPath for the UI
         private ColoredPath DictToPath(Dictionary<string, string> content)
         {
             string SVGpath = content["svgpath"].ToString();
@@ -169,6 +176,7 @@ namespace Network
             return new ColoredPath { Color = Colour, Path = path, StrokeWidth = strokeWidth };
         }
 
+        //Convert received dictionary to ColoredLine for the UI
         private ColoredLine DictToLine(Dictionary<string, string> content)
         {
             string ColourHash = content["colorHash"];
@@ -184,6 +192,7 @@ namespace Network
             return new ColoredLine { Start = start, End = end, Color = Colour, StrokeWidth = strokeWidth };
         }
 
+        //Convert the received dictionary to ColoredCircle for the UI
         private ColoredCircle DictToCircle(Dictionary<string, string> content)
         {
             string ColourHash = content["colorHash"];
@@ -197,6 +206,7 @@ namespace Network
             return new ColoredCircle { Center = point, Color = Colour, Radius = radius, StrokeWidth = strokeWidth };
         }
 
+        // Convert the received dictionary to ColoredRectangle for the UI
         private ColoredRectangle DictToRectangle(Dictionary<string, string> content)
         {
             string ColourHash = content["colorHash"];
@@ -212,6 +222,7 @@ namespace Network
             return new ColoredRectangle { Start = start, End = end, Color = color, StrokeWidth = strokeWidth };
         }
 
+        //Sends the json data to the server
         private void SendData(JObject json)
         {
             string Json = json.ToString();
@@ -219,41 +230,45 @@ namespace Network
             sender.Send(Json);
         }
 
-
+        //Convert ColoredCircle to json and trigger sending method
         public void Send(ColoredCircle circle)
         {
             JObject json = Jsonify(circle);
             SendData(json);
         }
 
+        //Convert ColeredPath to json and trigger sending method
         public void Send(ColoredPath path)
         {
             JObject json = Jsonify(path);
             SendData(json);
         }
 
+        //convert Colored Line to json and trigger sending method
         public void Send(ColoredLine line)
         {
             JObject json = Jsonify(line);
             SendData(json);
         }
 
+
         public void RestoreWhiteboard(List<object> form, int client_id)
         {
             //send the current status of the whiteboard to the server
-            //TODO serialize the forms object
             JObject json = new JObject(new JProperty("type", "RESTORE"),
                 new JProperty("client_id", client_id),
                 new JProperty("content", JsonifyFormList(form)));
             SendData(json);
         }
 
+        //Convert ColoredLine to json and trigger sending method
         public void Send(ColoredRectangle rectangle)
         {
             JObject json = Jsonify(rectangle);
             SendData(json);
         }
 
+        //Send string action to server (there is only one action, however if more were added the if statement would be converted into a switch)
         public void Send(string action)
         {
             if (action == "CLEAR")
@@ -263,6 +278,11 @@ namespace Network
             }
         }
 
+        /// <summary>
+        /// Convert FormList to JArray for seding
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
         private JArray JsonifyFormList(List<object> form)
         {
             JArray jArray = new JArray();
@@ -299,6 +319,11 @@ namespace Network
         }
 
 
+        /// <summary>
+        /// Convert Colored Rectangle to json to preapre for sending
+        /// </summary>
+        /// <param name="rectangle"></param>
+        /// <returns></returns>
         private JObject Jsonify(ColoredRectangle rectangle)
         {
             string colourHash = rectangle.Color.ToString();
@@ -316,6 +341,12 @@ namespace Network
             return json;
         }
 
+
+        /// <summary>
+        /// Convert ColoredCircle to json object for sending
+        /// </summary>
+        /// <param name="circle"></param>
+        /// <returns>JObject</returns>
         private JObject Jsonify(ColoredCircle circle)
         {
             string colourHash = circle.Color.ToString();
@@ -333,6 +364,11 @@ namespace Network
             return json;
         }
 
+        /// <summary>
+        /// Convert coloredPath to JObject for sending
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         private JObject Jsonify(ColoredPath path)
         {
             string colourHash = path.Color.ToString();
@@ -346,6 +382,12 @@ namespace Network
             return json;
         }
 
+
+        /// <summary>
+        /// Convert colered line to json for sending
+        /// </summary>
+        /// <param name="line"></param>
+        /// <returns></returns>
         private JObject Jsonify(ColoredLine line)
         {
             string colourHash = line.Color.ToString();

@@ -6,6 +6,9 @@ using Newtonsoft.Json.Linq;
 
 namespace Network
 {
+    /// <summary>
+    /// Handle incoming connections, handles transferring packets to the correct client
+    /// </summary>
     public class HostListener
     {
         public Socket ListenerSocket { get; }
@@ -20,6 +23,9 @@ namespace Network
             ListenerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
 
+        /// <summary>
+        /// start the listener -> begin accepting connections from other instances of the application
+        /// </summary>
         public void StartNewWhiteboardListener()
         {
             Debug.WriteLine("Server:Started Listening on port {0}, protocol: {1}", Port, ProtocolType.Tcp);
@@ -28,6 +34,10 @@ namespace Network
             ListenerSocket.BeginAccept(AcceptNewConnection, ListenerSocket);
         }
 
+        /// <summary>
+        /// AsyncCallback triggered when a new client connects. Adds the client to the client list and sets it up.
+        /// </summary>
+        /// <param name="ar"></param>
         private void AcceptNewConnection(IAsyncResult ar)
         {
             try
@@ -48,6 +58,10 @@ namespace Network
             }
         }
 
+        /// <summary>
+        /// Send the size of the whiteboard to a new client so the UI can correctly rescale the drawings
+        /// </summary>
+        /// <param name="socket"></param>
         private void SendSize(Socket socket)
         {
             PacketSender sender = new PacketSender(socket);
@@ -58,6 +72,11 @@ namespace Network
             sender.Send(json.ToString());
         }
 
+        /// <summary>
+        /// Initiates the whiteboard restoration process so a new client receives the current status of the whiteboard
+        /// when connecting
+        /// </summary>
+        /// <param name="client"></param>
         private void RestoreWhiteboard(ServerClient client)
         {
             int id = client.Id;
