@@ -2,6 +2,9 @@
 
 namespace Network
 {
+    /// <summary>
+    /// Client class for the server application to keep track of connected clients.
+    /// </summary>
     public class ServerClient
     {
         public Socket Socket { get; }

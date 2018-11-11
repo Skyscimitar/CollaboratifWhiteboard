@@ -4,6 +4,9 @@ using System.Net.Sockets;
 
 namespace Network
 {
+    /// <summary>
+    /// Packet receiver class, handles receiving data for the server and the client
+    /// </summary>
     public class PacketReceiver
     {
         private byte[] _buffer;
@@ -24,6 +27,9 @@ namespace Network
             IsServer = false;
         }
 
+        /// <summary>
+        /// sets up the socket to receive information
+        /// </summary>
         public void StartReceiving()
         {
             try
@@ -37,6 +43,11 @@ namespace Network
             }
         }
 
+
+        /// <summary>
+        /// Callback triggered when the socket receives data
+        /// </summary>
+        /// <param name="ar"></param>
         private void ReceiveCallback(IAsyncResult ar)
         {
             try
@@ -78,7 +89,6 @@ namespace Network
         private void Disconnect()
         {
             _receiveSocket.Disconnect(true);
-            //Todo: fill in depending on if the receiver is server or not
         }
     }
 }

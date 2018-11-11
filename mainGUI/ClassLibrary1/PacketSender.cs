@@ -5,6 +5,9 @@ using System.Net.Sockets;
 
 namespace Network
 {
+    /// <summary>
+    /// Class used to send data through the socket.
+    /// </summary>
     public class PacketSender
     {
         private readonly Socket _sendSocket;
